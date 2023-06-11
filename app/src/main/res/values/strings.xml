@@ -6,4 +6,11 @@
     <string name="empty_pass">Password Kosong</string>
     <string name="img">ini gambar\n</string>
     <string name="loading">Loading</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <!-- Strings used for fragments for navigation -->
+
+    <string name="service">Produk</string>
+    <string name="username">nama akun</string>
+    <string name="welcome">Selamat Datang</string>
+    <string name="transaction">Transaksi</string>
 </resources>

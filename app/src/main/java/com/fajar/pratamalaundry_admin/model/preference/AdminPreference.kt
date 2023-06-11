@@ -8,11 +8,12 @@ import com.fajar.pratamalaundry_admin.model.admin.AdminModel
 
 class AdminPreference private constructor(private val dataStore: DataStore<Preferences>) {
 
-    fun gerAdmin(): Flow<AdminModel> {
+    fun getAdmin(): Flow<AdminModel> {
         return dataStore.data.map { preferences ->
             AdminModel(
                 preferences[ID_KEY] ?: 0,
                 preferences[USERNAME_KEY] ?: "",
+                preferences[NAME_KEY] ?: "",
                 preferences[STATE_TOKEN] ?: "",
                 preferences[STATE_KEY] ?: false,
             )
@@ -31,12 +32,13 @@ class AdminPreference private constructor(private val dataStore: DataStore<Prefe
         }
     }
 
-    suspend fun saveUser(user: AdminModel) {
+    suspend fun saveUser(admin: AdminModel) {
         dataStore.edit { preferences ->
-            preferences[ID_KEY] = user.localId
-            preferences[USERNAME_KEY] = user.username
-            preferences[STATE_TOKEN] = user.token
-            preferences[STATE_KEY] = user.isLogin
+            preferences[ID_KEY] = admin.localId
+            preferences[USERNAME_KEY] = admin.username
+            preferences[NAME_KEY] = admin.nama_petugas
+            preferences[STATE_TOKEN] = admin.token
+            preferences[STATE_KEY] = admin.isLogin
         }
     }
     suspend fun logout() {
@@ -51,8 +53,10 @@ class AdminPreference private constructor(private val dataStore: DataStore<Prefe
     companion object{
         @Volatile
         private var INSTANCE: AdminPreference? = null
+
         private val ID_KEY = intPreferencesKey("id")
         private val USERNAME_KEY = stringPreferencesKey("username")
+        private val NAME_KEY = stringPreferencesKey("nama")
         private val STATE_TOKEN = stringPreferencesKey("token")
         private val STATE_KEY = booleanPreferencesKey("state")
 

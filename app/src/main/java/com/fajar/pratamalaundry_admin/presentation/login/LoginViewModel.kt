@@ -21,6 +21,7 @@ class LoginViewModel(
             val data = AdminModel(
                 adminLogin.data.id_petugas,
                 adminLogin.data.username,
+                adminLogin.data.nama_petugas,
                 adminLogin.token,
                 true
             )

@@ -9,6 +9,7 @@ import com.fajar.pratamalaundry_admin.di.Injection
 import com.fajar.pratamalaundry_admin.model.preference.AdminPreference
 import com.fajar.pratamalaundry_admin.model.usecase.AdminUseCase
 import com.fajar.pratamalaundry_admin.presentation.login.LoginViewModel
+import com.fajar.pratamalaundry_admin.presentation.main.MainViewModel
 import com.fajar.pratamalaundry_admin.presentation.splash.SplashViewModel
 
 class ViewModelFactory(
@@ -23,7 +24,9 @@ class ViewModelFactory(
             modelClass.isAssignableFrom(LoginViewModel::class.java) -> LoginViewModel(
                 adminUseCase, pref
             ) as T
-
+            modelClass.isAssignableFrom(MainViewModel::class.java) -> MainViewModel(
+                pref
+            ) as T
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }
