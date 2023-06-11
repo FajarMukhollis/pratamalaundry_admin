@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="service">Produk</string>
+    <string name="username">nama akun</string>
+    <string name="welcome">Selamat Datang</string>
+    <string name="transaction">Transaksi</string>
+    <string name="number">1</string>
+    <string name="product_name">nama produk</string>
+    <string name="rupiah">Rp</string>
+    <string name="harga">harga</string>
+    <string name="list_menu_service">Daftar Layanan</string>
+</resources>
