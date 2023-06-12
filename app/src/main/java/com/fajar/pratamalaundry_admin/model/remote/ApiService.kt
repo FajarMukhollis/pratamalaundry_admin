@@ -1,6 +1,8 @@
 package com.fajar.pratamalaundry_admin.model.remote
 
+import com.fajar.pratamalaundry_admin.model.request.AddProductRequest
 import com.fajar.pratamalaundry_admin.model.request.LoginRequest
+import com.fajar.pratamalaundry_admin.model.response.AddProductResponse
 import com.fajar.pratamalaundry_admin.model.response.LoginResponse
 import com.fajar.pratamalaundry_admin.model.response.ProductResponse
 import retrofit2.*
@@ -17,4 +19,9 @@ interface ApiService {
 
     @GET("product/product")
     fun getProduct(): Call<ProductResponse>
+
+    @POST("product/product")
+    fun addProduct(
+        @Body addProductRequest: AddProductRequest
+    ): Call<AddProductResponse>
 }

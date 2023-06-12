@@ -18,4 +18,6 @@
     <string name="rupiah">Rp</string>
     <string name="harga">harga</string>
     <string name="list_menu_service">Daftar Layanan</string>
+    <string name="submit">tambah\n</string>
+    <string name="add_product">TAMBAH PRODUCT</string>
 </resources>

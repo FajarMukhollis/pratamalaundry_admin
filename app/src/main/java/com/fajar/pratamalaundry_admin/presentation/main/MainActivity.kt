@@ -9,6 +9,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import com.fajar.pratamalaundry_admin.databinding.ActivityMainBinding
+import com.fajar.pratamalaundry_admin.presentation.product.ProductActivity
 import com.fajar.pratamalaundry_admin.presentation.profile.ProfileActivity
 import com.fajar.pratamalaundry_admin.presentation.transaction.TransactionActivity
 import com.fajar.pratamalaundry_admin.viewmodel.ViewModelFactory
@@ -35,6 +36,15 @@ class MainActivity : AppCompatActivity() {
             toTransaction()
         }
 
+        _binding.conService.setOnClickListener {
+            toService()
+        }
+
+    }
+
+    private fun toService() {
+        val moveToProduct = Intent(this, ProductActivity::class.java)
+        startActivity(moveToProduct)
     }
 
     private fun getName() {
