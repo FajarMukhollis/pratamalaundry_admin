@@ -3,40 +3,82 @@ package com.fajar.pratamalaundry_admin.presentation.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.fajar.pratamalaundry_admin.R
+import com.fajar.pratamalaundry_admin.model.remote.ApiConfig
+import com.fajar.pratamalaundry_admin.model.response.DeleteProductResponse
 import com.fajar.pratamalaundry_admin.model.response.ProductResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-class ProductAdapter(private val results : ArrayList<ProductResponse.Product>)
-    : RecyclerView.Adapter<ProductAdapter.ViewHolderProduct>() {
+class ProductAdapter(
+    private val results: ArrayList<ProductResponse.Product>
+) : RecyclerView.Adapter<ProductAdapter.ViewHolderProduct>() {
+
+    private lateinit var onItemClickListener: OnItemClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderProduct {
-        LayoutInflater.from(parent.context).inflate(R.layout.item_row_product, parent, false).apply {
-            return ViewHolderProduct(this)
-        }
-
+        return ViewHolderProduct(
+            LayoutInflater.from(parent.context).inflate(R.layout.item_row_product, parent, false)
+        )
     }
 
     override fun getItemCount(): Int = results.size
 
     override fun onBindViewHolder(holder: ViewHolderProduct, position: Int) {
         val result = results[position]
+        holder.apply {
+            id_produk.text = result.id_product
+            nama_produk.text = result.nama_produk
+            jenis_service.text = result.jenis_service
+            harga_produk.text = result.harga_produk
 
-        holder.view.findViewById<ImageView>(R.id.btn_delete)
-        holder.view.findViewById<ImageView>(R.id.btn_edit)
-        holder.view.findViewById<TextView>(R.id.id_product).text = result.id_product
-        holder.view.findViewById<TextView>(R.id.name_product).text = result.nama_produk
-        holder.view.findViewById<TextView>(R.id.service).text = result.jenis_service
-        holder.view.findViewById<TextView>(R.id.harga).text = result.harga_produk
+            btn_delete.setOnClickListener {
+                onItemClickListener.onItemClick(position)
+            }
+        }
     }
 
-    class ViewHolderProduct(val view: View): RecyclerView.ViewHolder(view)
+    inner class ViewHolderProduct(view: View) : RecyclerView.ViewHolder(view) {
+        val id_produk = view.findViewById<TextView>(R.id.id_product)
+        val nama_produk = view.findViewById<TextView>(R.id.name_product)
+        val jenis_service = view.findViewById<TextView>(R.id.service)
+        val harga_produk = view.findViewById<TextView>(R.id.harga)
+        val btn_delete = view.findViewById<ImageView>(R.id.btn_delete)
+        val btn_edit = view.findViewById<ImageView>(R.id.btn_edit)
+    }
 
     fun setData(data: List<ProductResponse.Product>) {
         results.clear()
         results.addAll(data)
         notifyDataSetChanged()
+    }
+
+    fun getItem(position: Int): ProductResponse.Product {
+        return results[position]
+    }
+
+    fun removeItem(id_produk: String) {
+        val iterator = results.iterator()
+        while (iterator.hasNext()) {
+            val product = iterator.next()
+            if (product.id_product == id_produk) {
+                iterator.remove()
+                notifyItemRemoved(results.indexOf(product))
+                break
+            }
+        }
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        this.onItemClickListener = listener
+    }
+
+    interface OnItemClickListener {
+        fun onItemClick(position: Int)
     }
 }

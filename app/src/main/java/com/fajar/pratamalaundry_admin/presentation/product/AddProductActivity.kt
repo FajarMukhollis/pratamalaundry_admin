@@ -44,9 +44,12 @@ class AddProductActivity : AppCompatActivity() {
                 call: Call<AddProductResponse>,
                 response: Response<AddProductResponse>
             ) {
-
                 if(response.isSuccessful){
-                    Toast.makeText(this@AddProductActivity, "Data Berhasil Ditambahkan", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@AddProductActivity,
+                        "Data Berhasil Ditambahkan",
+                        Toast.LENGTH_SHORT)
+                        .show()
                 } else {
                     Toast.makeText(this@AddProductActivity, "Data Gagal Ditambahkan", Toast.LENGTH_SHORT).show()
                 }

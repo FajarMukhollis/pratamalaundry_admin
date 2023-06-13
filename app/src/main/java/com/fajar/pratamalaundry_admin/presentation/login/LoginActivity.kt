@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -23,6 +24,7 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var _binding: ActivityLoginBinding
     private lateinit var loginViewModel: LoginViewModel
+    private lateinit var loadingDialog: AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +38,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setViewModel() {
-        val factory = ViewModelFactory.getInstance(this,dataStore)
+        val factory = ViewModelFactory.getInstance(this, dataStore)
         loginViewModel = ViewModelProvider(this, factory)[LoginViewModel::class.java]
     }
 
@@ -48,20 +50,26 @@ class LoginActivity : AppCompatActivity() {
         val password = passwordEditText.text.toString()
 
         when {
-            username.isEmpty() -> usernameEditText.error = resources.getString(R.string.empty_email)
+            username.isEmpty() -> usernameEditText.error = resources.getString(R.string.empty_username)
             password.isEmpty() -> passwordEditText.error = resources.getString(R.string.empty_pass)
+            username.isEmpty() && password.isEmpty() -> {
+                usernameEditText.error = resources.getString(R.string.empty_username)
+                passwordEditText.error = resources.getString(R.string.empty_pass)
+            }
+
+
             else -> {
-                //loading dialog
+                // Tampilkan loading dialog
                 val customBind = DialogLoadingBinding.inflate(layoutInflater)
                 val loadingDialogBuilder = AlertDialog.Builder(this).apply {
                     setView(customBind.root)
                     setCancelable(false)
                 }
-                val loadingDialog = loadingDialogBuilder.create()
+                loadingDialog = loadingDialogBuilder.create()
+                loadingDialog.show()
 
                 loginViewModel.loginAdmin(username, password).observe(this) { result ->
                     when (result) {
-                        is Result.Loading -> loadingDialog.show()
                         is Result.Success -> {
                             loadingDialog.dismiss()
                             loginViewModel.saveUser(result.data)
@@ -71,22 +79,15 @@ class LoginActivity : AppCompatActivity() {
                             toMain()
                         }
                         is Result.Error -> {
-                            loadingDialog.dismiss()
                             errorAlert()
+                        }
+                        is Result.Loading -> {
+                            loadingDialog.dismiss()
                         }
                     }
                 }
             }
-
         }
-
-
-    }
-
-    private fun checkEmailError(target: CharSequence): Boolean {
-        return if (TextUtils.isEmpty(target)) false else android.util.Patterns.EMAIL_ADDRESS.matcher(
-            target
-        ).matches()
     }
 
     private fun errorAlert() {
@@ -103,5 +104,4 @@ class LoginActivity : AppCompatActivity() {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
     }
-
 }
