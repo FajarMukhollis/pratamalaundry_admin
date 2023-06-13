@@ -20,6 +20,7 @@ class ProductAdapter(
 ) : RecyclerView.Adapter<ProductAdapter.ViewHolderProduct>() {
 
     private lateinit var onItemClickListener: OnItemClickListener
+    private lateinit var onEditClickListener: OnEditClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderProduct {
         return ViewHolderProduct(
@@ -39,6 +40,10 @@ class ProductAdapter(
 
             btn_delete.setOnClickListener {
                 onItemClickListener.onItemClick(position)
+            }
+
+            btn_edit.setOnClickListener {
+                onEditClickListener.onEditClick(position)
             }
         }
     }
@@ -78,7 +83,15 @@ class ProductAdapter(
         this.onItemClickListener = listener
     }
 
+    fun setOnEditClickListener(listener: OnEditClickListener) {
+        this.onEditClickListener = listener
+    }
+
     interface OnItemClickListener {
         fun onItemClick(position: Int)
+    }
+
+    interface OnEditClickListener {
+        fun onEditClick(position: Int)
     }
 }

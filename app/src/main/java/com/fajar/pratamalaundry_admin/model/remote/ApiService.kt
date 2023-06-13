@@ -2,9 +2,11 @@ package com.fajar.pratamalaundry_admin.model.remote
 
 import com.fajar.pratamalaundry_admin.model.request.AddProductRequest
 import com.fajar.pratamalaundry_admin.model.request.DeleteProductRequest
+import com.fajar.pratamalaundry_admin.model.request.EditProductRequest
 import com.fajar.pratamalaundry_admin.model.request.LoginRequest
 import com.fajar.pratamalaundry_admin.model.response.AddProductResponse
 import com.fajar.pratamalaundry_admin.model.response.DeleteProductResponse
+import com.fajar.pratamalaundry_admin.model.response.EditProductResponse
 import com.fajar.pratamalaundry_admin.model.response.LoginResponse
 import com.fajar.pratamalaundry_admin.model.response.ProductResponse
 import retrofit2.*
@@ -31,4 +33,9 @@ interface ApiService {
     fun deleteProduct(
         @Body deleteProductRequest : DeleteProductRequest
     ): Call<DeleteProductResponse>
+
+    @PUT("edit_product")
+    fun editProduct(
+        @Body editProductRequest: EditProductRequest
+    ): Call<EditProductResponse>
 }

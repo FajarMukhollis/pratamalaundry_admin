@@ -10,4 +10,13 @@
     <string name="harga">harga</string>
     <string name="list_menu_service">Daftar Layanan</string>
     <string name="add_product">TAMBAH PRODUCT</string>
+    <string name="change_password">Ganti Password</string>
+    <string name="profile">Profile</string>
+    <string name="name">Nama :</string>
+    <string name="no_telp">No Hp</string>
+    <string name="address">Alamat</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="logout">Logout</string>
+    <string name="txtUsername">Username</string>
 </resources>
