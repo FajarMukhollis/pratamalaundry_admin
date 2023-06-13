@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="12dp">
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tv_nama_produk"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Nama Produk"
+        android:inputType="text"
+        android:padding="5dp"
+        android:selectAllOnFocus="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="Autofill">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_edit_nama_produk"
+            style="@style/InputTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvLogin" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tv_jenis_service"
+        tools:ignore="Autofill"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Jenis Service"
+        android:inputType="text"
+        android:padding="5dp"
+        android:layout_marginTop="10dp"
+        android:selectAllOnFocus="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_nama_produk">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_edit_jenis_service"
+            style="@style/InputTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvLogin" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tv_harga"
+        tools:ignore="Autofill"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Harga"
+        android:inputType="text"
+        android:padding="5dp"
+        android:layout_marginTop="10dp"
+        android:selectAllOnFocus="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_jenis_service">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_edit_harga"
+            style="@style/InputTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvLogin" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
