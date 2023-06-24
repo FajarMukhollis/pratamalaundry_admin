@@ -29,4 +29,8 @@
     <string name="password">Password</string>
     <string name="logout">Logout</string>
     <string name="txtUsername">Username</string>
+    <string name="history">Riwayat Transaksi Pelanggan</string>
+    <string name="status_bayar">Status Bayar</string>
+    <string name="status_barang">Status Barang</string>
+    <string name="encryp">*****************</string>
 </resources>

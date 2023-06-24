@@ -124,15 +124,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnPassword"
+            <TextView
+                android:id="@+id/tvPassword"
+                style="@style/textNormal"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:text="@string/change_password"
-                android:background="@drawable/btn_style"
-                style="@style/ButtonStyle"
+                android:layout_marginStart="70dp"
+                android:text="@string/encryp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/password"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -70,19 +70,19 @@ class LoginActivity : AppCompatActivity() {
 
                 loginViewModel.loginAdmin(username, password).observe(this) { result ->
                     when (result) {
+                        is Result.Loading -> loadingDialog.show()
                         is Result.Success -> {
                             loadingDialog.dismiss()
                             loginViewModel.saveUser(result.data)
+//                            loginViewModel.saveToken(result.data.token)
                             loginViewModel.getToken().observe(this) { token ->
                                 println("ini token :$token")
                             }
                             toMain()
                         }
                         is Result.Error -> {
-                            errorAlert()
-                        }
-                        is Result.Loading -> {
                             loadingDialog.dismiss()
+                            errorAlert()
                         }
                     }
                 }

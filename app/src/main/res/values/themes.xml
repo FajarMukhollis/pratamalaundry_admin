@@ -14,6 +14,10 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="backgroundlayer">
+        <item name="backgroundColor">@color/background</item>
+    </style>
+
     <style name="Theme.Pratamalaundry_admin.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

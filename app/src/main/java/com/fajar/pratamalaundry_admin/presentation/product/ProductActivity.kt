@@ -1,14 +1,18 @@
 package com.fajar.pratamalaundry_admin.presentation.product
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.get
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,6 +31,8 @@ class ProductActivity : AppCompatActivity() {
 
     private lateinit var _binding: ActivityProductBinding
     private lateinit var adapterProduct: ProductAdapter
+    private var selectedItemPosition: Int = -1
+    private lateinit var selectedProduct: ProductResponse.Product
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +43,11 @@ class ProductActivity : AppCompatActivity() {
         fabAdd.setOnClickListener {
             startActivity(Intent(this, AddProductActivity::class.java))
         }
+//
+//        val intentTrim = Intent(this@ProductActivity, ProductActivity::class.java)
+//        intentTrim.getStringExtra("nama_produk")
+//        intentTrim.getStringExtra("jenis_service")
+//        intentTrim.getStringExtra("harga_produk")
 
         initRecyclerView()
         getDataFromApi()
@@ -195,6 +206,7 @@ class ProductActivity : AppCompatActivity() {
     }
 
     private fun initRecyclerView() {
+        val rvProduct = _binding.recylerProduct
         adapterProduct = ProductAdapter(arrayListOf())
         adapterProduct.setOnItemClickListener(object : ProductAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
@@ -204,11 +216,13 @@ class ProductActivity : AppCompatActivity() {
 
         adapterProduct.setOnEditClickListener(object : ProductAdapter.OnEditClickListener {
             override fun onEditClick(position: Int) {
+                selectedItemPosition = position
+                selectedProduct = adapterProduct.getItem(position)
                 showEditProductForm(position)
             }
         })
 
-        _binding.recylerProduct.apply {
+        rvProduct.apply {
             layoutManager = LinearLayoutManager(this@ProductActivity)
             val decoration = DividerItemDecoration(this@ProductActivity, DividerItemDecoration.VERTICAL)
             addItemDecoration(decoration)
@@ -243,14 +257,22 @@ class ProductActivity : AppCompatActivity() {
             .create()
 
         editProductDialog.setOnShowListener { dialog ->
+            val namaProdukEditText = editProductDialog.findViewById<EditText>(R.id.et_edit_nama_produk)
+            val jenisServiceEditText = editProductDialog.findViewById<EditText>(R.id.et_edit_jenis_service)
+            val hargaProdukEditText = editProductDialog.findViewById<EditText>(R.id.et_edit_harga)
+
+            namaProdukEditText?.setText(selectedProduct.nama_produk)
+            jenisServiceEditText?.setText(selectedProduct.jenis_service)
+            hargaProdukEditText?.setText(selectedProduct.harga_produk)
+
             val saveButton = editProductDialog.getButton(AlertDialog.BUTTON_POSITIVE)
             saveButton.setOnClickListener {
-                val namaProduk = editProductDialog.findViewById<EditText>(R.id.et_edit_nama_produk)?.text.toString()
-                val jenisService = editProductDialog.findViewById<EditText>(R.id.et_edit_jenis_service)?.text.toString()
-                val hargaProduk = editProductDialog.findViewById<EditText>(R.id.et_edit_harga)?.text.toString()
+                val namaProduk = namaProdukEditText?.text.toString()
+                val jenisService = jenisServiceEditText?.text.toString()
+                val hargaProduk = hargaProdukEditText?.text.toString()
 
                 if (namaProduk.isNotEmpty() && jenisService.isNotEmpty() && hargaProduk.isNotEmpty()) {
-                    editProduct(product.id_product, namaProduk, jenisService, hargaProduk)
+                    editProduct(selectedProduct.id_product, namaProduk, jenisService, hargaProduk)
                     dialog.dismiss()
                 } else {
                     Toast.makeText(this@ProductActivity, "Please fill in all fields", Toast.LENGTH_SHORT).show()

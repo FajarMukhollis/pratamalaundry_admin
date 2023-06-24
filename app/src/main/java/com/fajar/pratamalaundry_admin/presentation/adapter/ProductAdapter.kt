@@ -1,16 +1,19 @@
 package com.fajar.pratamalaundry_admin.presentation.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.fajar.pratamalaundry_admin.R
 import com.fajar.pratamalaundry_admin.model.remote.ApiConfig
 import com.fajar.pratamalaundry_admin.model.response.DeleteProductResponse
 import com.fajar.pratamalaundry_admin.model.response.ProductResponse
+import com.fajar.pratamalaundry_admin.presentation.product.ProductActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
