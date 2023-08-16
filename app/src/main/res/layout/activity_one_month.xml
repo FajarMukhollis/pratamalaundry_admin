@@ -6,38 +6,39 @@
     android:layout_height="match_parent"
     android:layout_margin="12dp"
     android:background="@color/transparent"
-    tools:context=".presentation.product.ProductActivity">
+    tools:context=".presentation.recap.OneMonthActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
-        android:background="@color/blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/blue"
         app:navigationIcon="@drawable/ic_arrow_back">
 
         <TextView
             style="@style/TitleTheme"
+            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/list_menu_service"
-            android:textColor="@color/white"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:text="Rekap 30 Hari Terakhir"
+            android:textColor="@color/white"/>
 
     </com.google.android.material.appbar.MaterialToolbar>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyler_product"
+        android:id="@+id/rv_oneMonth"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        tools:listitem="@layout/item_row_product" />
+        tools:listitem="@layout/item_row_one_month" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -47,18 +48,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:contentDescription="@string/img"
-        android:padding="4dp"
-        android:src="@drawable/ic_add"
-        app:backgroundTint="@color/green"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@color/white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

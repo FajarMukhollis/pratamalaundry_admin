@@ -12,4 +12,5 @@
     <color name="transparent">#00000000</color>
     <color name="background">#F0F0F0</color>
     <color name="green">#06A94D</color>
+    <color name="underline">#D8D6D6</color>
 </resources>

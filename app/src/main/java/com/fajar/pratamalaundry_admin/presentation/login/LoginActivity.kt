@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.datastore.core.DataStore
@@ -20,11 +21,11 @@ import com.fajar.pratamalaundry_admin.model.result.Result
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
+private const val TAG = "LoginActivity"
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var _binding: ActivityLoginBinding
     private lateinit var loginViewModel: LoginViewModel
-    private lateinit var loadingDialog: AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,17 +57,13 @@ class LoginActivity : AppCompatActivity() {
                 usernameEditText.error = resources.getString(R.string.empty_username)
                 passwordEditText.error = resources.getString(R.string.empty_pass)
             }
-
-
             else -> {
-                // Tampilkan loading dialog
                 val customBind = DialogLoadingBinding.inflate(layoutInflater)
                 val loadingDialogBuilder = AlertDialog.Builder(this).apply {
                     setView(customBind.root)
                     setCancelable(false)
                 }
-                loadingDialog = loadingDialogBuilder.create()
-                loadingDialog.show()
+                val loadingDialog = loadingDialogBuilder.create()
 
                 loginViewModel.loginAdmin(username, password).observe(this) { result ->
                     when (result) {
@@ -74,15 +71,13 @@ class LoginActivity : AppCompatActivity() {
                         is Result.Success -> {
                             loadingDialog.dismiss()
                             loginViewModel.saveUser(result.data)
-//                            loginViewModel.saveToken(result.data.token)
-                            loginViewModel.getToken().observe(this) { token ->
-                                println("ini token :$token")
-                            }
+                            Log.d(TAG, "loginAction: ${result.data}")
                             toMain()
                         }
                         is Result.Error -> {
                             loadingDialog.dismiss()
-                            errorAlert()
+                            Log.d(TAG, "loginAction: ${result.error}")
+                            errorAlert(result.error)
                         }
                     }
                 }
@@ -90,10 +85,14 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun errorAlert() {
+
+    private fun errorAlert(message: String) {
         AlertDialog.Builder(this).apply {
-            setTitle(resources.getString(R.string.failed_login))
-            setMessage(resources.getString(R.string.not_found))
+            setTitle("Login Gagal")
+            setMessage(message)
+            setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+            }
             create()
             show()
         }

@@ -1,5 +1,13 @@
 package com.fajar.pratamalaundry_admin.presentation.transaction
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
+import android.content.Context
+import android.content.Intent
+import android.os.Build
+import androidx.core.app.NotificationCompat
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +18,8 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fajar.pratamalaundry_admin.R
@@ -28,27 +38,34 @@ import retrofit2.Response
 
 class TransactionActivity : AppCompatActivity() {
 
-    private val statusBayarItems = arrayListOf(
-        "BELUM LUNAS",
-        "LUNAS"
-    )
-    private val statusBarangItems = arrayListOf(
-        "BELUM DI PROSES",
-        "SEDANG DI PROSES",
-        "SELESAI"
-    )
-
     private lateinit var _binding: ActivityTransactionBinding
     private lateinit var transactionAdapter: TransactionAdapter
+    private lateinit var transactionViewModel: TransactionViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityTransactionBinding.inflate(layoutInflater)
         setContentView(_binding.root)
 
+        transactionViewModel = ViewModelProvider(this).get(TransactionViewModel::class.java)
+
+        transactionViewModel.isLoading.observe(this, Observer { Loading ->
+            showLoading(Loading)
+        })
+
+
         initRecyclerView()
-        getTransaction()
+        showTransaction()
+        observeTransactionData()
         setActionBar()
 
+    }
+
+    private fun showTransaction(){
+        transactionViewModel.getTransaction()
+        transactionViewModel.errorMessage.observe(this, Observer {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        })
     }
 
     private fun setActionBar() {
@@ -62,6 +79,7 @@ class TransactionActivity : AppCompatActivity() {
                 onBackPressed()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -91,7 +109,7 @@ class TransactionActivity : AppCompatActivity() {
         }
     }
 
-    private fun showData(data: TransactionResponse){
+    private fun showData(data: TransactionResponse) {
         val results = data.data
         transactionAdapter.setData(results)
     }
@@ -107,12 +125,15 @@ class TransactionActivity : AppCompatActivity() {
         val history = transactionAdapter.getItem(position)
         AlertDialog.Builder(this)
             .setTitle("Delete Product")
-            .setMessage("Are you sure you want to delete this product?")
-            .setPositiveButton("Delete") { dialog, _ ->
-                deleteHistory(history.id_transaksi)
+            .setMessage("Apakah Kamu yakin untuk menghapus data transaksi ini?")
+            .setPositiveButton("Hapus") { dialog, _ ->
+                transactionViewModel.deleteTransaction(history.id_transaksi)
                 dialog.dismiss()
+                transactionViewModel.errorMessage.observe(this@TransactionActivity, Observer {
+                    Toast.makeText(this@TransactionActivity, "Data Berhasil Dihapus", Toast.LENGTH_SHORT).show()
+                })
             }
-            .setNegativeButton("Cancel") { dialog, _ ->
+            .setNegativeButton("Batal") { dialog, _ ->
                 dialog.dismiss()
             }
             .show()
@@ -130,25 +151,28 @@ class TransactionActivity : AppCompatActivity() {
         editHistoryDialog.setOnShowListener { dialog ->
             val saveButton = editHistoryDialog.getButton(AlertDialog.BUTTON_POSITIVE)
             saveButton.setOnClickListener {
-
                 val spStatusBayar = editHistoryDialog.findViewById<Spinner>(R.id.sp_status_bayar)
                 val spStatusBarang = editHistoryDialog.findViewById<Spinner>(R.id.sp_status_barang)
                 val etTanggal = editHistoryDialog.findViewById<EditText>(R.id.et_tanggal)
-
+//                val statusBayar = resources.getStringArray(R.array.status_bayar)
+                val statusBarang = resources.getStringArray(R.array.status_barang)
 
                 if (spStatusBayar != null) {
-                    spStatusBayar.adapter = ArrayAdapter(
+                    spStatusBayar.adapter = ArrayAdapter.createFromResource(
                         this,
-                        android.R.layout.simple_spinner_dropdown_item,
-                        statusBayarItems
-                    )
+                        R.array.status_bayar,
+                        android.R.layout.simple_spinner_dropdown_item
+                    ).also { adapter ->
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                        spStatusBayar.adapter = adapter
+                    }
                 }
 
                 if (spStatusBarang != null) {
                     spStatusBarang.adapter = ArrayAdapter(
                         this,
                         android.R.layout.simple_spinner_dropdown_item,
-                        statusBarangItems
+                        statusBarang
                     )
                 }
 
@@ -156,7 +180,7 @@ class TransactionActivity : AppCompatActivity() {
                 spStatusBayar?.selectedItem.toString()
                 spStatusBarang?.selectedItem.toString()
 
-                putHistory(
+                transactionViewModel.putHistory(
                     history.id_transaksi,
                     spStatusBayar.toString(),
                     spStatusBayar.toString(),
@@ -169,130 +193,9 @@ class TransactionActivity : AppCompatActivity() {
         return editHistoryDialog.show()
     }
 
-
-    private fun getTransaction(){
-        showLoading(true)
-        val retroInstance = ApiConfig.getApiService()
-        val call = retroInstance.getHistory()
-        call.enqueue(object : Callback<TransactionResponse> {
-            override fun onResponse(
-                call: Call<TransactionResponse>,
-                response: Response<TransactionResponse>
-            ) {
-                showLoading(false)
-                if (response.isSuccessful){
-                    showData(response.body()!!)
-                    Toast.makeText(
-                        this@TransactionActivity,
-                        "Data Transaksi Pelanggan BERHASIL Di Temukan",
-                        Toast.LENGTH_SHORT)
-                        .show()
-                } else {
-                    Toast.makeText(
-                        this@TransactionActivity,
-                        "Data Transaksi Pelanggan TIDAK Di Temukan",
-                        Toast.LENGTH_LONG)
-                        .show()
-                }
-            }
-
-            override fun onFailure(call: Call<TransactionResponse>, t: Throwable) {
-                showLoading(false)
-            }
-
-        })
+    private fun observeTransactionData() {
+        transactionViewModel.transaction.observe(this) { transaction ->
+            transactionAdapter.setData(transaction)
+        }
     }
-
-    private fun deleteHistory(id_transaksi: String){
-        showLoading(true)
-        val retroInstance = ApiConfig.getApiService()
-        val request = DeleteHistoryRequest(id_transaksi = id_transaksi)
-        val call = retroInstance.deleteHistory(request)
-        call.enqueue(object : Callback<DeleteHistoryResponse>{
-            override fun onResponse(
-                call: Call<DeleteHistoryResponse>,
-                response: Response<DeleteHistoryResponse>
-            ) {
-                if (response.isSuccessful){
-                    Toast.makeText(
-                        this@TransactionActivity,
-                        "Data Transaksi Pelanggan BERHASIL Di Hapus",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    transactionAdapter.removeItem(id_transaksi)
-                    showLoading(false)
-                    getTransaction()
-                } else {
-                    Toast.makeText(
-                        this@TransactionActivity,
-                        "Data Transaksi Pelanggan TIDAK Di Hapus",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    showLoading(false)
-                }
-            }
-
-            override fun onFailure(call: Call<DeleteHistoryResponse>, t: Throwable) {
-                showLoading(false)
-                Toast.makeText(
-                    this@TransactionActivity,
-                    "Failed to delete product: ${t.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
-                Log.d("TAG", "GAGAL HAPUS CUY: ${t.message}")
-            }
-
-        })
-    }
-
-    private fun putHistory (
-        id_transaksi:String,
-        status_bayar: String,
-        status_barang: String,
-        tgl_selesai: String){
-
-        showLoading(true)
-        val retroInstance = ApiConfig.getApiService()
-        val request = EditHistoryRequest(
-            id_transaksi = id_transaksi,
-            status_bayar = status_bayar,
-            status_barang = status_barang,
-            tgl_selesai = tgl_selesai
-        )
-        val call = retroInstance.editHistory(request)
-        call.enqueue(object : Callback<EditHistoryResponse>{
-            override fun onResponse(
-                call: Call<EditHistoryResponse>,
-                response: Response<EditHistoryResponse>
-            ) {
-                if (response.isSuccessful){
-                    Toast.makeText(
-                        this@TransactionActivity,
-                        "Data Transaksi Pelanggan BERHASIL Di Ubah",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    showLoading(false)
-                    getTransaction()
-                } else {
-                    Toast.makeText(
-                        this@TransactionActivity,
-                        "Data Transaksi Pelanggan GAGAL Di Ubah",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    showLoading(false)
-                }
-            }
-
-            override fun onFailure(call: Call<EditHistoryResponse>, t: Throwable) {
-                showLoading(false)
-                Toast.makeText(
-                    this@TransactionActivity,
-                    "Failed to edit product: ${t.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
-                Log.d("TAG", "GAGAL EDIT CUY: ${t.message}")
-            }
-        })
-    }
-
 }

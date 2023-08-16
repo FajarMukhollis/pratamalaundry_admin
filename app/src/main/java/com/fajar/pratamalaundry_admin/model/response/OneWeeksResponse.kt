@@ -2,12 +2,17 @@ package com.fajar.pratamalaundry_admin.model.response
 
 import com.google.gson.annotations.SerializedName
 
-data class TransactionResponse(
-    val `data`: ArrayList<Data>,
+data class OneWeeksResponse(
+    @SerializedName("status")
+    val status: Boolean,
+
+    @SerializedName("message")
     val message: String,
-    val status: Boolean
+
+    @SerializedName("data")
+    val `data`: ArrayList<OneWeek>
 ) {
-    data class Data(
+    data class OneWeek(
         @SerializedName("id_transaksi")
         val id_transaksi: String,
 
@@ -54,7 +59,7 @@ data class TransactionResponse(
         val nama_pelanggan: String,
 
         @SerializedName("nama_produk")
-        val nama_produk: String,
+        val nama_produk: String
 
     )
 }

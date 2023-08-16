@@ -13,6 +13,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.get
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -33,11 +35,19 @@ class ProductActivity : AppCompatActivity() {
     private lateinit var adapterProduct: ProductAdapter
     private var selectedItemPosition: Int = -1
     private lateinit var selectedProduct: ProductResponse.Product
+    private lateinit var productViewModel: ProductViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityProductBinding.inflate(layoutInflater)
         setContentView(_binding.root)
+
+        productViewModel= ViewModelProvider(this).get(ProductViewModel::class.java)
+        productViewModel.fetchProducts()
+
+        productViewModel.isLoading.observe(this, Observer { Loading ->
+            showLoading(Loading)
+        })
 
         val fabAdd = _binding.fabAdd
         fabAdd.setOnClickListener {
@@ -50,7 +60,7 @@ class ProductActivity : AppCompatActivity() {
 //        intentTrim.getStringExtra("harga_produk")
 
         initRecyclerView()
-        getDataFromApi()
+        observeProductData()
         setActionBar()
         hideFab()
     }
@@ -70,114 +80,12 @@ class ProductActivity : AppCompatActivity() {
         }
     }
 
-    private fun getDataFromApi() {
-        showLoading(true)
-        val retroInstance = ApiConfig.getApiService()
-        val call = retroInstance.getProduct()
-        call.enqueue(object : Callback<ProductResponse> {
-            override fun onResponse(
-                call: Call<ProductResponse>,
-                response: Response<ProductResponse>
-            ) {
-                showLoading(false)
-                if (response.isSuccessful) {
-                    showData(response.body()!!)
-                }
-            }
-
-            override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
-                showLoading(false)
-            }
-        })
+    private fun observeProductData() {
+        productViewModel.products.observe(this) { products ->
+            adapterProduct.setData(products)
+        }
     }
 
-    private fun deleteProduct(id_product: String) {
-        showLoading(true)
-        val retroInstance = ApiConfig.getApiService()
-        val request = DeleteProductRequest(
-            id_product = id_product
-        )
-        val call = retroInstance.deleteProduct(request)
-        call.enqueue(object : Callback<DeleteProductResponse> {
-            override fun onResponse(
-                call: Call<DeleteProductResponse>,
-                response: Response<DeleteProductResponse>
-            ) {
-                if (response.isSuccessful) {
-                    Toast.makeText(
-                        this@ProductActivity,
-                        "BERHASIL MENGHAPUS DATA",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    adapterProduct.removeItem(id_product)
-                    showLoading(false)
-                    getDataFromApi()
-                } else {
-                    Toast.makeText(
-                        this@ProductActivity,
-                        "GAGAL MENGHAPUS DATA",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    showLoading(false)
-                }
-            }
-
-            override fun onFailure(call: Call<DeleteProductResponse>, t: Throwable) {
-                showLoading(false)
-                Toast.makeText(
-                    this@ProductActivity,
-                    "Failed to delete product: ${t.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
-                Log.d("TAG", "GAGAL HAPUS CUY: ${t.message}")
-            }
-        })
-    }
-
-    private fun editProduct(id_produk: String, nama_produk: String, jenis_service: String, harga_produk: String) {
-        showLoading(true)
-        val retroInstance = ApiConfig.getApiService()
-        val request = EditProductRequest(
-            id_produk = id_produk,
-            nama_produk = nama_produk,
-            jenis_service = jenis_service,
-            harga_produk = harga_produk
-        )
-        val call = retroInstance.editProduct(request)
-        call.enqueue(object : Callback<EditProductResponse> {
-            override fun onResponse(
-                call: Call<EditProductResponse>,
-                response: Response<EditProductResponse>
-            ) {
-                if (response.isSuccessful) {
-                    Toast.makeText(
-                        this@ProductActivity,
-                        "BERHASIL MENGEDIT DATA",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    showLoading(false)
-                    getDataFromApi()
-                } else {
-                    Toast.makeText(
-                        this@ProductActivity,
-                        "GAGAL MENGEDIT DATA",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    showLoading(false)
-                }
-            }
-
-            override fun onFailure(call: Call<EditProductResponse>, t: Throwable) {
-                showLoading(false)
-                Toast.makeText(
-                    this@ProductActivity,
-                    "Failed to edit product: ${t.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
-                Log.d("TAG", "GAGAL EDIT CUY: ${t.message}")
-            }
-        })
-    }
 
     private fun hideFab() {
         val fab = _binding.fabAdd
@@ -237,7 +145,7 @@ class ProductActivity : AppCompatActivity() {
             .setTitle("Delete Product")
             .setMessage("Are you sure you want to delete this product?")
             .setPositiveButton("Delete") { dialog, _ ->
-                deleteProduct(product.id_product)
+                productViewModel.deleteProduct(product.id_product)
                 dialog.dismiss()
             }
             .setNegativeButton("Cancel") { dialog, _ ->
@@ -272,7 +180,7 @@ class ProductActivity : AppCompatActivity() {
                 val hargaProduk = hargaProdukEditText?.text.toString()
 
                 if (namaProduk.isNotEmpty() && jenisService.isNotEmpty() && hargaProduk.isNotEmpty()) {
-                    editProduct(selectedProduct.id_product, namaProduk, jenisService, hargaProduk)
+                    productViewModel.editProduct(selectedProduct.id_product, namaProduk, jenisService, hargaProduk)
                     dialog.dismiss()
                 } else {
                     Toast.makeText(this@ProductActivity, "Please fill in all fields", Toast.LENGTH_SHORT).show()

@@ -33,4 +33,17 @@
     <string name="status_bayar">Status Bayar</string>
     <string name="status_barang">Status Barang</string>
     <string name="encryp">*****************</string>
+    <string name="notifications">Ada Transaksi baru nih!</string>
+    <string name="rekap_transaksi">Rekap Transaksi</string>
+
+    <string-array name="status_bayar">
+        <item>Belum Lunas</item>
+        <item>Lunas</item>
+    </string-array>
+
+    <string-array name="status_barang">
+        <item>Belum Di Proses</item>
+        <item>Sedang Di Proses</item>
+        <item>Selesai</item>
+    </string-array>
 </resources>

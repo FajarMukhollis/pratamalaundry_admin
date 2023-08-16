@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "807455621602",
+    "project_id": "pratama-laundry-admin",
+    "storage_bucket": "pratama-laundry-admin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:807455621602:android:1607af7beebc6f61eef9bb",
+        "android_client_info": {
+          "package_name": "com.fajar.pratamalaundry_admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "807455621602-ag5nh1prpoavl55nk9bdcovk1pnnpof3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCh4fxC4k_Es92HsXBiOyMSKSOluuD0m5Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "807455621602-ag5nh1prpoavl55nk9bdcovk1pnnpof3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -12,6 +12,8 @@ import com.fajar.pratamalaundry_admin.model.response.DeleteProductResponse
 import com.fajar.pratamalaundry_admin.model.response.EditHistoryResponse
 import com.fajar.pratamalaundry_admin.model.response.EditProductResponse
 import com.fajar.pratamalaundry_admin.model.response.LoginResponse
+import com.fajar.pratamalaundry_admin.model.response.OneMonthResponse
+import com.fajar.pratamalaundry_admin.model.response.OneWeeksResponse
 import com.fajar.pratamalaundry_admin.model.response.ProductResponse
 import com.fajar.pratamalaundry_admin.model.response.TransactionResponse
 import retrofit2.*
@@ -44,7 +46,7 @@ interface ApiService {
         @Body editProductRequest: EditProductRequest
     ): Call<EditProductResponse>
 
-    @GET("admin/history")
+    @GET("get_history")
     fun getHistory(): Call <TransactionResponse>
 
     @HTTP(method = "DELETE", path = "delete_history", hasBody = true)
@@ -56,4 +58,10 @@ interface ApiService {
     fun editHistory(
         @Body editHistoryRequest: EditHistoryRequest
     ): Call<EditHistoryResponse>
+
+    @GET("get_oneWeeks")
+    fun getOneWeeks(): Call<OneWeeksResponse>
+
+    @GET("get_oneMonths")
+    fun getOneMonths(): Call<OneMonthResponse>
 }

@@ -23,4 +23,6 @@
     <string name="status_bayar">Status Bayar</string>
     <string name="status_barang">Status Barang</string>
     <string name="encryp">*****************</string>
+    <string name="notifications">Ada Transaksi baru nih!</string>
+    <string name="rekap_transaksi">Rekap Transaksi</string>
 </resources>

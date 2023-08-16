@@ -9,14 +9,14 @@ import com.fajar.pratamalaundry_admin.model.preference.AdminPreference
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(
-    private val userPreference: AdminPreference
+    private val adminPreference: AdminPreference
 ): ViewModel() {
 
-    fun getAdminData(): LiveData<AdminModel> = userPreference.getAdmin().asLiveData()
+    fun getAdminData(): LiveData<AdminModel> = adminPreference.getAdmin().asLiveData()
 
     fun signOut() {
         viewModelScope.launch {
-            userPreference.logout()
+            adminPreference.logout()
         }
     }
 }
