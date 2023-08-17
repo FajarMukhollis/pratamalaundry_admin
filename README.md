@@ -1,1 +1,1 @@
-# pratamalaundey_admin
+# pratamalaundry_admin
