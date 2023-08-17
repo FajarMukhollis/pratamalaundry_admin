@@ -17,10 +17,15 @@ class AdminRepository(
             try {
                 val response = apiService.loginAdmin(LoginRequest(username, pass))
 
-                if (response.body()?.status == false) {
-                    emit(Result.Error("salah di user repository"))
-                } else if (response.body()?.status == true) {
-                    emit(Result.Success(response.body()!!))
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    if (responseBody?.status == true && responseBody.data != null) {
+                        emit(Result.Success(responseBody))
+                    } else {
+                        emit(Result.Error("Username dan Password Tidak diketahui"))
+                    }
+                } else {
+                    emit(Result.Error("Gagal melakukan permintaan login"))
                 }
             } catch (e: Exception) {
                 emit(Result.Error(e.message.toString()))

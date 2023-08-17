@@ -69,6 +69,7 @@ class LoginActivity : AppCompatActivity() {
                     when (result) {
                         is Result.Loading -> loadingDialog.show()
                         is Result.Success -> {
+                            Toast.makeText(this, "Login Berhasil", Toast.LENGTH_SHORT).show()
                             loadingDialog.dismiss()
                             loginViewModel.saveUser(result.data)
                             Log.d(TAG, "loginAction: ${result.data}")
@@ -76,6 +77,7 @@ class LoginActivity : AppCompatActivity() {
                         }
                         is Result.Error -> {
                             loadingDialog.dismiss()
+                            Toast.makeText(this, "Username dan Password Tidak diketahui", Toast.LENGTH_SHORT).show()
                             Log.d(TAG, "loginAction: ${result.error}")
                             errorAlert(result.error)
                         }
