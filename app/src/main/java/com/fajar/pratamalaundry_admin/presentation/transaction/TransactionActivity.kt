@@ -150,48 +150,63 @@ class TransactionActivity : AppCompatActivity() {
 
         editHistoryDialog.setOnShowListener { dialog ->
             val saveButton = editHistoryDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            val spStatusBayar = editHistoryDialog.findViewById<Spinner>(R.id.sp_status_bayar)
+            val spStatusBarang = editHistoryDialog.findViewById<Spinner>(R.id.sp_status_barang)
+            val etTanggal = editHistoryDialog.findViewById<EditText>(R.id.et_tanggal)
+            val statusBayar = resources.getStringArray(R.array.status_bayar)
+            val statusBarang = resources.getStringArray(R.array.status_barang)
+
+            if (spStatusBayar != null) {
+                val statusBayarAdapter = ArrayAdapter(
+                    this,
+                    android.R.layout.simple_spinner_item,
+                    statusBayar
+                )
+                spStatusBayar.adapter = statusBayarAdapter
+
+                // Set selected item if needed
+                val initialStatusBayar = history.status_bayar
+                Log.d("EditHistoryDialog", "Initial Status Bayar: $initialStatusBayar")
+                val initialStatusBayarPosition = statusBayar.indexOf(initialStatusBayar)
+                if (initialStatusBayarPosition >= 0) {
+                    spStatusBayar.setSelection(initialStatusBayarPosition)
+                }
+            }
+
+            if (spStatusBarang != null) {
+                val statusBarangAdapter = ArrayAdapter(
+                    this,
+                    android.R.layout.simple_spinner_item,
+                    statusBarang
+                )
+                spStatusBarang.adapter = statusBarangAdapter
+
+                // Set selected item if needed
+                val initialStatusBarang = history.status_barang
+                val initialStatusBarangPosition = statusBarang.indexOf(initialStatusBarang)
+                if (initialStatusBarangPosition >= 0) {
+                    spStatusBarang.setSelection(initialStatusBarangPosition)
+                }
+            }
+
             saveButton.setOnClickListener {
-                val spStatusBayar = editHistoryDialog.findViewById<Spinner>(R.id.sp_status_bayar)
-                val spStatusBarang = editHistoryDialog.findViewById<Spinner>(R.id.sp_status_barang)
-                val etTanggal = editHistoryDialog.findViewById<EditText>(R.id.et_tanggal)
-//                val statusBayar = resources.getStringArray(R.array.status_bayar)
-                val statusBarang = resources.getStringArray(R.array.status_barang)
-
-                if (spStatusBayar != null) {
-                    spStatusBayar.adapter = ArrayAdapter.createFromResource(
-                        this,
-                        R.array.status_bayar,
-                        android.R.layout.simple_spinner_dropdown_item
-                    ).also { adapter ->
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                        spStatusBayar.adapter = adapter
-                    }
-                }
-
-                if (spStatusBarang != null) {
-                    spStatusBarang.adapter = ArrayAdapter(
-                        this,
-                        android.R.layout.simple_spinner_dropdown_item,
-                        statusBarang
-                    )
-                }
-
-                etTanggal?.text
-                spStatusBayar?.selectedItem.toString()
-                spStatusBarang?.selectedItem.toString()
+                val selectedStatusBayar = spStatusBayar?.selectedItem.toString()
+                val selectedStatusBarang = spStatusBarang?.selectedItem.toString()
+                val selectedTanggal = etTanggal?.text.toString()
 
                 transactionViewModel.putHistory(
                     history.id_transaksi,
-                    spStatusBayar.toString(),
-                    spStatusBayar.toString(),
-                    etTanggal.toString()
+                    selectedStatusBayar,
+                    selectedStatusBarang,
+                    selectedTanggal
                 )
 
                 editHistoryDialog.dismiss()
             }
         }
-        return editHistoryDialog.show()
+        editHistoryDialog.show()
     }
+
 
     private fun observeTransactionData() {
         transactionViewModel.transaction.observe(this) { transaction ->

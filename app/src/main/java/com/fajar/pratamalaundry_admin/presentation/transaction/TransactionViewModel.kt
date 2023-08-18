@@ -102,11 +102,11 @@ class TransactionViewModel:ViewModel() {
                 response: Response<EditHistoryResponse>
             ) {
                 if (response.isSuccessful) {
-                    _errorMessage.value = "Data Transaksi Pelanggan BERHASIL Di Ubah {${response.message()}}"
+                    _errorMessage.value = "Data Transaksi Pelanggan BERHASIL Di Ubah"
                     showLoading(false)
                     getTransaction()
                 } else {
-                    _errorMessage.value = "Gagal mengubah data {${response.message()}}"
+                    _errorMessage.value = "GAGAL mengubah data"
                 }
             }
 

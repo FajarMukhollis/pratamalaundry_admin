@@ -32,6 +32,7 @@ class ProfileActivity : AppCompatActivity() {
 
         _binding.btnLogout.setOnClickListener {
             val moveLogin = Intent(this, LoginActivity::class.java)
+            moveLogin.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             profileViewModel.signOut()
             startActivity(moveLogin)
         }
