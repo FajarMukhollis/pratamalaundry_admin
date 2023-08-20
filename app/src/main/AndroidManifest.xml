@@ -15,6 +15,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.transaction.DetailTransactionActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.recap.OneMonthActivity"
             android:exported="false" />
         <activity

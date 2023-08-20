@@ -7,16 +7,20 @@ import com.fajar.pratamalaundry_admin.model.remote.ApiConfig
 import com.fajar.pratamalaundry_admin.model.request.DeleteHistoryRequest
 import com.fajar.pratamalaundry_admin.model.request.EditHistoryRequest
 import com.fajar.pratamalaundry_admin.model.response.DeleteHistoryResponse
+import com.fajar.pratamalaundry_admin.model.response.DetailTransaksiResponse
 import com.fajar.pratamalaundry_admin.model.response.EditHistoryResponse
 import com.fajar.pratamalaundry_admin.model.response.TransactionResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class TransactionViewModel:ViewModel() {
+class TransactionViewModel : ViewModel() {
 
     private val _transactions = MutableLiveData<List<TransactionResponse.Data>>()
     val transaction: MutableLiveData<List<TransactionResponse.Data>> = _transactions
+
+    private val _detailTransaksi = MutableLiveData<DetailTransaksiResponse.DetailDataTransaction>()
+    val detailTransaksi: LiveData<DetailTransaksiResponse.DetailDataTransaction> = _detailTransaksi
 
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> get() = _errorMessage
@@ -25,7 +29,7 @@ class TransactionViewModel:ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    fun getTransaction(){
+    fun getTransaction() {
         showLoading(true)
         val retroInstance = ApiConfig.getApiService()
         val call = retroInstance.getHistory()
@@ -35,7 +39,6 @@ class TransactionViewModel:ViewModel() {
                 response: Response<TransactionResponse>
             ) {
                 showLoading(false)
-                _isLoading.value = false
                 if (response.isSuccessful) {
                     _transactions.value = response.body()?.data
                     _errorMessage.value = "Data Transaksi Ditemukan"
@@ -53,7 +56,7 @@ class TransactionViewModel:ViewModel() {
         })
     }
 
-    fun deleteTransaction(id_transaksi: String){
+    fun deleteTransaction(id_transaksi: String) {
         showLoading(true)
         val retroInstance = ApiConfig.getApiService()
         val request = DeleteHistoryRequest(id_transaksi = id_transaksi)
@@ -64,10 +67,13 @@ class TransactionViewModel:ViewModel() {
                 response: Response<DeleteHistoryResponse>
             ) {
                 if (response.isSuccessful) {
+                    showLoading(false)
+                    _errorMessage.value = "Data Transaksi Pelanggan BERHASIL Di Hapus"
                     val newDataList = _transactions.value?.toMutableList()
                     newDataList?.removeAll { it.id_transaksi == id_transaksi }
                     getTransaction()
                 } else {
+                    showLoading(false)
                     _errorMessage.value = "Gagal menghapus data"
                 }
                 showLoading(false)
@@ -102,8 +108,8 @@ class TransactionViewModel:ViewModel() {
                 response: Response<EditHistoryResponse>
             ) {
                 if (response.isSuccessful) {
-                    _errorMessage.value = "Data Transaksi Pelanggan BERHASIL Di Ubah"
                     showLoading(false)
+                    _errorMessage.value = "Data Transaksi Pelanggan BERHASIL Di Ubah"
                     getTransaction()
                 } else {
                     _errorMessage.value = "GAGAL mengubah data"
@@ -111,7 +117,7 @@ class TransactionViewModel:ViewModel() {
             }
 
             override fun onFailure(call: Call<EditHistoryResponse>, t: Throwable) {
-                _isLoading.value = false
+                showLoading(false)
                 _errorMessage.value = "Gagal mengubah data: ${t.message}"
             }
         })

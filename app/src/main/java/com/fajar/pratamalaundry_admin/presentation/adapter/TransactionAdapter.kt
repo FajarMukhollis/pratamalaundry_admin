@@ -10,11 +10,12 @@ import com.fajar.pratamalaundry_admin.R
 import com.fajar.pratamalaundry_admin.model.response.ProductResponse
 import com.fajar.pratamalaundry_admin.model.response.TransactionResponse
 
-class TransactionAdapter(private val results : ArrayList<TransactionResponse.Data>)
-    : RecyclerView.Adapter<TransactionAdapter.ViewHolderTransaction>() {
+class TransactionAdapter(private val results: ArrayList<TransactionResponse.Data>) :
+    RecyclerView.Adapter<TransactionAdapter.ViewHolderTransaction>() {
 
-    private lateinit var onItemClickListener: OnItemClickListener
+    private lateinit var onDeleteClickListener: OnDeleteClickListener
     private lateinit var onEditClickListener: OnEditClickListener
+    private lateinit var onItemClickListener: OnItemClickListener
 
     inner class ViewHolderTransaction(view: View) : RecyclerView.ViewHolder(view) {
         val tv_date_order = view.findViewById<TextView>(R.id.tv_date_order)
@@ -25,10 +26,19 @@ class TransactionAdapter(private val results : ArrayList<TransactionResponse.Dat
         val btn_update = view.findViewById<ImageView>(R.id.btn_update)
         val btn_delete = view.findViewById<ImageView>(R.id.btn_delete)
 
+        init {
+            view.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onItemClickListener.onItemClick(position)
+                }
+            }
+        }
+
     }
 
     override fun onBindViewHolder(holder: ViewHolderTransaction, position: Int) {
-       val result = results[position]
+        val result = results[position]
         holder.apply {
             tv_date_order.text = result.tgl_order
             name_customer.text = result.nama_pelanggan
@@ -37,19 +47,19 @@ class TransactionAdapter(private val results : ArrayList<TransactionResponse.Dat
             tv_status_bayar.text = result.status_bayar
 
             btn_delete.setOnClickListener {
-                onItemClickListener.onItemClick(position)
+                onDeleteClickListener.onDeleteClick(position)
             }
 
             btn_update.setOnClickListener {
                 onEditClickListener.onEditClick(position)
             }
-
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderTransaction {
         return ViewHolderTransaction(
-            LayoutInflater.from(parent.context).inflate(R.layout.item_row_transaction, parent, false)
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_row_transaction, parent, false)
         )
     }
 
@@ -73,20 +83,28 @@ class TransactionAdapter(private val results : ArrayList<TransactionResponse.Dat
         notifyDataSetChanged()
     }
 
-    fun setOnItemClickListener(listener: OnItemClickListener) {
-        this.onItemClickListener = listener
+    fun setOnDeleteClickListener(listener: OnDeleteClickListener) {
+        this.onDeleteClickListener = listener
     }
 
     fun setOnEditClickListener(listener: OnEditClickListener) {
         this.onEditClickListener = listener
     }
 
-    interface OnItemClickListener {
-        fun onItemClick(position: Int)
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        this.onItemClickListener = listener
+    }
+
+    interface OnDeleteClickListener {
+        fun onDeleteClick(position: Int)
     }
 
     interface OnEditClickListener {
         fun onEditClick(position: Int)
+    }
+
+    interface OnItemClickListener {
+        fun onItemClick(position: Int)
     }
 
     fun getItem(position: Int): TransactionResponse.Data {

@@ -9,6 +9,7 @@ import com.fajar.pratamalaundry_admin.model.request.LoginRequest
 import com.fajar.pratamalaundry_admin.model.response.AddProductResponse
 import com.fajar.pratamalaundry_admin.model.response.DeleteHistoryResponse
 import com.fajar.pratamalaundry_admin.model.response.DeleteProductResponse
+import com.fajar.pratamalaundry_admin.model.response.DetailTransaksiResponse
 import com.fajar.pratamalaundry_admin.model.response.EditHistoryResponse
 import com.fajar.pratamalaundry_admin.model.response.EditProductResponse
 import com.fajar.pratamalaundry_admin.model.response.LoginResponse
@@ -38,7 +39,7 @@ interface ApiService {
 
     @HTTP(method = "DELETE", path = "delete_product", hasBody = true)
     fun deleteProduct(
-        @Body deleteProductRequest : DeleteProductRequest
+        @Body deleteProductRequest: DeleteProductRequest
     ): Call<DeleteProductResponse>
 
     @PUT("edit_product")
@@ -47,11 +48,11 @@ interface ApiService {
     ): Call<EditProductResponse>
 
     @GET("get_history")
-    fun getHistory(): Call <TransactionResponse>
+    fun getHistory(): Call<TransactionResponse>
 
     @HTTP(method = "DELETE", path = "delete_history", hasBody = true)
     fun deleteHistory(
-        @Body deleteHistoryRequest : DeleteHistoryRequest
+        @Body deleteHistoryRequest: DeleteHistoryRequest
     ): Call<DeleteHistoryResponse>
 
     @PUT("edit_history")
@@ -64,4 +65,9 @@ interface ApiService {
 
     @GET("get_oneMonths")
     fun getOneMonths(): Call<OneMonthResponse>
+
+    @GET("detail_transaksi/{id_transaksi}")
+    fun getDetailTransaksi(
+        @Path("id_transaksi") idTransaksi: String
+    ): Call<DetailTransaksiResponse>
 }

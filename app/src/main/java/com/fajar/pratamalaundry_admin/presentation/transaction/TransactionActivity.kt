@@ -86,8 +86,8 @@ class TransactionActivity : AppCompatActivity() {
 
     private fun initRecyclerView() {
         transactionAdapter = TransactionAdapter(arrayListOf())
-        transactionAdapter.setOnItemClickListener(object : TransactionAdapter.OnItemClickListener {
-            override fun onItemClick(position: Int) {
+        transactionAdapter.setOnDeleteClickListener(object : TransactionAdapter.OnDeleteClickListener {
+            override fun onDeleteClick(position: Int) {
                 showDeleteConfirmationDialog(position)
             }
         })
@@ -98,6 +98,14 @@ class TransactionActivity : AppCompatActivity() {
             }
         })
 
+        transactionAdapter.setOnItemClickListener(object : TransactionAdapter.OnItemClickListener {
+            override fun onItemClick(position: Int) {
+                val idTransaksi = transactionAdapter.getItem(position)
+                val intent = Intent(this@TransactionActivity, DetailTransactionActivity::class.java)
+                intent.putExtra("id_transaksi", idTransaksi.id_transaksi)
+                startActivity(intent)
+            }
+        })
 
         _binding.rvTransaction.apply {
             layoutManager = LinearLayoutManager(this@TransactionActivity)
@@ -206,7 +214,6 @@ class TransactionActivity : AppCompatActivity() {
         }
         editHistoryDialog.show()
     }
-
 
     private fun observeTransactionData() {
         transactionViewModel.transaction.observe(this) { transaction ->
