@@ -53,7 +53,6 @@ class TransactionActivity : AppCompatActivity() {
             showLoading(Loading)
         })
 
-
         initRecyclerView()
         showTransaction()
         observeTransactionData()

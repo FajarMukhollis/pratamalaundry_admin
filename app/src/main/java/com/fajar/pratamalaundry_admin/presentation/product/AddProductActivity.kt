@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import com.fajar.pratamalaundry_admin.R
 import com.fajar.pratamalaundry_admin.databinding.ActivityAddProductBinding
 import com.fajar.pratamalaundry_admin.model.remote.ApiConfig
@@ -20,17 +21,20 @@ class AddProductActivity : AppCompatActivity() {
 
     private lateinit var _binding: ActivityAddProductBinding
     private lateinit var adapterProduct: ProductAdapter
+    private lateinit var productViewModel: ProductViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityAddProductBinding.inflate(layoutInflater)
         setContentView(_binding.root)
 
+        productViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
+
         setActionBar()
+        showLoading(false)
 
         _binding.btnAdd.setOnClickListener {
             addProduct()
-            getDataFromApi()
         }
     }
 
@@ -50,13 +54,20 @@ class AddProductActivity : AppCompatActivity() {
     }
 
     private fun addProduct(){
-        val namaproduk = _binding.etNamaProduk
-        val serviceproduk = _binding.etServiceProduk
-        val harga = _binding.etHarga
+        showLoading(true)
+        val kategori = _binding.etKategori.text.toString()
+        val namaproduk = _binding.etNamaProduk.text.toString()
+        val serviceProduk = _binding.etServiceProduk.text.toString()
+        val durasi = _binding.etDurasi.text.toString()
+        val harga = _binding.etHarga.text.toString()
+        val satuan = _binding.etSatuan.text.toString()
         val addProduct = AddProductRequest(
-            nama_produk = namaproduk.text.toString(),
-            jenis_service = serviceproduk.text.toString(),
-            harga_produk = harga.text.toString()
+            kategori = kategori,
+            nama_produk = namaproduk,
+            jenis_service = serviceProduk,
+            durasi = durasi,
+            harga_produk = harga,
+            satuan = satuan
         )
 
         val retroInstance = ApiConfig.getApiService()
@@ -66,6 +77,7 @@ class AddProductActivity : AppCompatActivity() {
                 call: Call<AddProductResponse>,
                 response: Response<AddProductResponse>
             ) {
+                showLoading(false)
                 if(response.isSuccessful){
                     Toast.makeText(
                         this@AddProductActivity,
@@ -76,39 +88,15 @@ class AddProductActivity : AppCompatActivity() {
                     Toast.makeText(this@AddProductActivity, "Data Gagal Ditambahkan", Toast.LENGTH_SHORT).show()
                 }
                 finish()
+                productViewModel.fetchProducts()
             }
 
             override fun onFailure(call: Call<AddProductResponse>, t: Throwable) {
+                showLoading(false)
                 Toast.makeText(this@AddProductActivity, "Data Gagal Ditambahkan", Toast.LENGTH_SHORT).show()
             }
 
         })
-    }
-
-    private fun getDataFromApi() {
-        showLoading(true)
-        val retroInstance = ApiConfig.getApiService()
-        val call = retroInstance.getProduct()
-        call.enqueue(object : Callback<ProductResponse> {
-            override fun onResponse(
-                call: Call<ProductResponse>,
-                response: Response<ProductResponse>
-            ) {
-                showLoading(false)
-                if (response.isSuccessful) {
-                    showData(response.body()!!)
-                }
-            }
-
-            override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
-                showLoading(false)
-            }
-        })
-    }
-
-    private fun showData(data: ProductResponse) {
-        val results = data.data
-        adapterProduct.setData(results)
     }
 
     private fun showLoading(loading: Boolean) {

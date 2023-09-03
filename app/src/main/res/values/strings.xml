@@ -19,7 +19,7 @@
     <string name="harga">harga</string>
     <string name="list_menu_service">Daftar Layanan</string>
     <string name="submit">tambah\n</string>
-    <string name="add_product">TAMBAH PRODUCT</string>
+    <string name="add_product">Tambah Produk</string>
     <string name="change_password">Ganti Password</string>
     <string name="profile">Profile</string>
     <string name="name">Nama</string>
@@ -42,7 +42,7 @@
     </string-array>
 
     <string-array name="status_barang">
-        <item>Belum Di Proses</item>
+        <item>Menunggu Konfirmasi</item>
         <item>Sedang Di Proses</item>
         <item>Selesai</item>
     </string-array>

@@ -79,14 +79,25 @@ class ProductViewModel : ViewModel() {
         })
     }
 
-    fun editProduct(id_produk: String, nama_produk: String, jenis_service: String, harga_produk: String) {
+    fun editProduct(
+        id_produk: String,
+        kategori: String,
+        nama_produk: String,
+        jenis_service: String,
+        durasi: String,
+        harga_produk: String,
+        satuan: String
+    ) {
         showLoading(true)
         val retroInstance = ApiConfig.getApiService()
         val request = EditProductRequest(
             id_produk = id_produk,
+            kategori = kategori,
             nama_produk = nama_produk,
             jenis_service = jenis_service,
-            harga_produk = harga_produk
+            durasi = durasi,
+            harga_produk = harga_produk,
+            satuan = satuan
         )
         val call = retroInstance.editProduct(request)
         call.enqueue(object : Callback<EditProductResponse> {

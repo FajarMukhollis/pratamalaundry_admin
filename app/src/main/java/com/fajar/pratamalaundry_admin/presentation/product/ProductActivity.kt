@@ -1,18 +1,13 @@
 package com.fajar.pratamalaundry_admin.presentation.product
 
-import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.get
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -20,14 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fajar.pratamalaundry_admin.R
 import com.fajar.pratamalaundry_admin.databinding.ActivityProductBinding
-import com.fajar.pratamalaundry_admin.model.remote.ApiConfig
-import com.fajar.pratamalaundry_admin.model.request.DeleteProductRequest
-import com.fajar.pratamalaundry_admin.model.request.EditProductRequest
-import com.fajar.pratamalaundry_admin.model.response.DeleteProductResponse
-import com.fajar.pratamalaundry_admin.model.response.EditProductResponse
 import com.fajar.pratamalaundry_admin.model.response.ProductResponse
 import com.fajar.pratamalaundry_admin.presentation.adapter.ProductAdapter
-import retrofit2.*
 
 class ProductActivity : AppCompatActivity() {
 
@@ -43,7 +32,6 @@ class ProductActivity : AppCompatActivity() {
         setContentView(_binding.root)
 
         productViewModel= ViewModelProvider(this).get(ProductViewModel::class.java)
-        productViewModel.fetchProducts()
 
         productViewModel.isLoading.observe(this, Observer { Loading ->
             showLoading(Loading)
@@ -53,14 +41,16 @@ class ProductActivity : AppCompatActivity() {
         fabAdd.setOnClickListener {
             startActivity(Intent(this, AddProductActivity::class.java))
         }
-//
-//        val intentTrim = Intent(this@ProductActivity, ProductActivity::class.java)
-//        intentTrim.getStringExtra("nama_produk")
-//        intentTrim.getStringExtra("jenis_service")
-//        intentTrim.getStringExtra("harga_produk")
+
+        val swipeRefresh = _binding.swipeRefreshLayout
+        swipeRefresh.setOnRefreshListener {
+            productViewModel.fetchProducts()
+            swipeRefresh.isRefreshing = false
+        }
 
         initRecyclerView()
         observeProductData()
+        productViewModel.fetchProducts()
         setActionBar()
         hideFab()
     }
@@ -106,11 +96,6 @@ class ProductActivity : AppCompatActivity() {
                 }
             }
         })
-    }
-
-    private fun showData(data: ProductResponse) {
-        val results = data.data
-        adapterProduct.setData(results)
     }
 
     private fun initRecyclerView() {
@@ -165,22 +150,31 @@ class ProductActivity : AppCompatActivity() {
             .create()
 
         editProductDialog.setOnShowListener { dialog ->
+            val kategoriEditText = editProductDialog.findViewById<EditText>(R.id.et_kategori)
             val namaProdukEditText = editProductDialog.findViewById<EditText>(R.id.et_edit_nama_produk)
             val jenisServiceEditText = editProductDialog.findViewById<EditText>(R.id.et_edit_jenis_service)
+            val durasiEditText = editProductDialog.findViewById<EditText>(R.id.et_durasi)
             val hargaProdukEditText = editProductDialog.findViewById<EditText>(R.id.et_edit_harga)
+            val satuanEditText = editProductDialog.findViewById<EditText>(R.id.et_satuan)
 
+            kategoriEditText?.setText(selectedProduct.kategori)
             namaProdukEditText?.setText(selectedProduct.nama_produk)
             jenisServiceEditText?.setText(selectedProduct.jenis_service)
+            durasiEditText?.setText(selectedProduct.durasi)
             hargaProdukEditText?.setText(selectedProduct.harga_produk)
+            satuanEditText?.setText(selectedProduct.satuan)
 
             val saveButton = editProductDialog.getButton(AlertDialog.BUTTON_POSITIVE)
             saveButton.setOnClickListener {
+                val kategori = kategoriEditText?.text.toString()
                 val namaProduk = namaProdukEditText?.text.toString()
                 val jenisService = jenisServiceEditText?.text.toString()
+                val durasi = durasiEditText?.text.toString()
                 val hargaProduk = hargaProdukEditText?.text.toString()
+                val satuan = satuanEditText?.text.toString()
 
-                if (namaProduk.isNotEmpty() && jenisService.isNotEmpty() && hargaProduk.isNotEmpty()) {
-                    productViewModel.editProduct(selectedProduct.id_product, namaProduk, jenisService, hargaProduk)
+                if (kategori.isNotEmpty() && namaProduk.isNotEmpty() && jenisService.isNotEmpty() && durasi.isNotEmpty() && hargaProduk.isNotEmpty() && satuan.isNotEmpty()) {
+                    productViewModel.editProduct(selectedProduct.id_product,kategori, namaProduk, jenisService, durasi, hargaProduk, satuan)
                     dialog.dismiss()
                 } else {
                     Toast.makeText(this@ProductActivity, "Please fill in all fields", Toast.LENGTH_SHORT).show()

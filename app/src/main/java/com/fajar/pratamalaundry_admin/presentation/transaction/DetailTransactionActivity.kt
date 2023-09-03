@@ -17,6 +17,7 @@ import retrofit2.*
 class DetailTransactionActivity : AppCompatActivity() {
 
     private lateinit var _binding: ActivityDetailTransactionBinding
+    private var baseUrl = "http://192.168.1.5/api-laundry"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,9 +54,14 @@ class DetailTransactionActivity : AppCompatActivity() {
                         _binding.tvHarga.text = it.totalHarga
                         _binding.tvKomplen.text = it.komplen
                         Glide.with(this@DetailTransactionActivity)
-                            .load(it.buktiBayar)
+                            .load("$baseUrl /img_payment/${it.buktiBayar}")
                             .into(_binding.imgPayment)
                     }
+                    Toast.makeText(
+                        this@DetailTransactionActivity,
+                        "Sukses Memuat Data",
+                        Toast.LENGTH_SHORT
+                    ).show()
 
                 } else {
                     showLoading(false)
@@ -71,7 +77,7 @@ class DetailTransactionActivity : AppCompatActivity() {
                 showLoading(false)
                 Toast.makeText(
                     this@DetailTransactionActivity,
-                    "Gagal Memuat Data: ${t.message}",
+                    "Gagal Memuat Data",
                     Toast.LENGTH_SHORT
                 ).show()
             }
