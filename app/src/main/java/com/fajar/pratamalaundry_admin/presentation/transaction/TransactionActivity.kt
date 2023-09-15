@@ -29,6 +29,7 @@ import com.fajar.pratamalaundry_admin.model.request.DeleteHistoryRequest
 import com.fajar.pratamalaundry_admin.model.request.EditHistoryRequest
 import com.fajar.pratamalaundry_admin.model.response.DeleteHistoryResponse
 import com.fajar.pratamalaundry_admin.model.response.EditHistoryResponse
+import com.fajar.pratamalaundry_admin.model.response.ProductResponse
 import com.fajar.pratamalaundry_admin.model.response.TransactionResponse
 import com.fajar.pratamalaundry_admin.presentation.adapter.ProductAdapter
 import com.fajar.pratamalaundry_admin.presentation.adapter.TransactionAdapter
@@ -41,6 +42,7 @@ class TransactionActivity : AppCompatActivity() {
     private lateinit var _binding: ActivityTransactionBinding
     private lateinit var transactionAdapter: TransactionAdapter
     private lateinit var transactionViewModel: TransactionViewModel
+    private lateinit var selectedDate: TransactionResponse.Data
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +62,7 @@ class TransactionActivity : AppCompatActivity() {
 
     }
 
-    private fun showTransaction(){
+    private fun showTransaction() {
         transactionViewModel.getTransaction()
         transactionViewModel.errorMessage.observe(this, Observer {
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
@@ -85,7 +87,8 @@ class TransactionActivity : AppCompatActivity() {
 
     private fun initRecyclerView() {
         transactionAdapter = TransactionAdapter(arrayListOf())
-        transactionAdapter.setOnDeleteClickListener(object : TransactionAdapter.OnDeleteClickListener {
+        transactionAdapter.setOnDeleteClickListener(object :
+            TransactionAdapter.OnDeleteClickListener {
             override fun onDeleteClick(position: Int) {
                 showDeleteConfirmationDialog(position)
             }
@@ -137,7 +140,11 @@ class TransactionActivity : AppCompatActivity() {
                 transactionViewModel.deleteTransaction(history.id_transaksi)
                 dialog.dismiss()
                 transactionViewModel.errorMessage.observe(this@TransactionActivity, Observer {
-                    Toast.makeText(this@TransactionActivity, "Data Berhasil Dihapus", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@TransactionActivity,
+                        "Data Berhasil Dihapus",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 })
             }
             .setNegativeButton("Batal") { dialog, _ ->
@@ -162,6 +169,7 @@ class TransactionActivity : AppCompatActivity() {
             val etTanggal = editHistoryDialog.findViewById<EditText>(R.id.et_tanggal)
             val statusBayar = resources.getStringArray(R.array.status_bayar)
             val statusBarang = resources.getStringArray(R.array.status_barang)
+            etTanggal?.setText(history.tgl_selesai)
 
             if (spStatusBayar != null) {
                 val statusBayarAdapter = ArrayAdapter(
@@ -207,7 +215,6 @@ class TransactionActivity : AppCompatActivity() {
                     selectedStatusBarang,
                     selectedTanggal
                 )
-
                 editHistoryDialog.dismiss()
             }
         }
