@@ -59,6 +59,9 @@ data class DetailTransaksiResponse(
         @SerializedName("nama_pelanggan")
         val namaPelanggan: String,
 
+        @SerializedName("no_telp")
+        var no_telp: String,
+
         @SerializedName("nama_produk")
         val namaProduk: String,
 

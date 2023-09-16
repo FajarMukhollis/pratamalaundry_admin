@@ -3,7 +3,7 @@
     <style name="Theme.Pratamalaundry_admin" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/blue</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorPrimaryVariant">@color/white</item>
         <item name="colorOnPrimary">@color/background</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
@@ -11,6 +11,7 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="l">true</item>
         <!-- Customize your theme here. -->
     </style>
 
@@ -28,8 +29,8 @@
         <item name="android:layout_height">50dp</item>
         <item name="android:paddingStart">10dp</item>
         <item name="android:paddingEnd">10dp</item>
-        <item name="android:background">@drawable/style_edit_text</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:radius">10dp</item>
         <item name="fontFamily">@font/poppinsregular</item>
     </style>
 

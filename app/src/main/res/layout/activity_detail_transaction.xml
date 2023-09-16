@@ -43,6 +43,38 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_name_customer" />
 
         <TextView
+            android:id="@+id/noTelp"
+            style="@style/textNormal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="No Hp :"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view" />
+
+        <TextView
+            android:id="@+id/tv_noTelp"
+            style="@style/textNormal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="isi alamat"
+            android:gravity="right"
+            android:layout_marginStart="80dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/noTelp"
+            app:layout_constraintTop_toTopOf="@+id/noTelp" />
+
+        <View
+            android:id="@+id/view2"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/underline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_noTelp" />
+
+        <TextView
             android:id="@+id/alamat"
             style="@style/textNormal"
             android:layout_width="0dp"
@@ -50,7 +82,7 @@
             android:layout_marginTop="10dp"
             android:text="Alamat :"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view" />
+            app:layout_constraintTop_toBottomOf="@+id/view2" />
 
         <TextView
             android:id="@+id/tv_alamat"
@@ -65,7 +97,7 @@
             app:layout_constraintTop_toTopOf="@+id/alamat" />
 
         <View
-            android:id="@+id/view2"
+            android:id="@+id/view3"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_marginTop="4dp"
@@ -83,7 +115,7 @@
             android:layout_marginTop="10dp"
             android:text="Produk :"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view2" />
+            app:layout_constraintTop_toBottomOf="@+id/view3" />
 
         <TextView
             android:id="@+id/tv_name_product"
@@ -97,7 +129,7 @@
             app:layout_constraintTop_toTopOf="@+id/name_product" />
 
         <View
-            android:id="@+id/view3"
+            android:id="@+id/view4"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_marginTop="4dp"
@@ -114,7 +146,7 @@
             android:layout_marginTop="10dp"
             android:text="Service :"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view3" />
+            app:layout_constraintTop_toBottomOf="@+id/view4" />
 
         <TextView
             android:id="@+id/tv_service"
@@ -128,7 +160,7 @@
             app:layout_constraintTop_toTopOf="@+id/name_service" />
 
         <View
-            android:id="@+id/view4"
+            android:id="@+id/view5"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_marginTop="4dp"
@@ -145,7 +177,7 @@
             android:layout_marginTop="10dp"
             android:text="Tanggal Order :"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view4" />
+            app:layout_constraintTop_toBottomOf="@+id/view5" />
 
         <TextView
             android:id="@+id/tv_tanggal_order"
@@ -159,7 +191,7 @@
             app:layout_constraintTop_toTopOf="@+id/tanggal_order" />
 
         <View
-            android:id="@+id/view5"
+            android:id="@+id/view6"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_marginTop="4dp"
@@ -176,7 +208,7 @@
             android:layout_marginTop="10dp"
             android:text="Tanggal Selesai :"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view5" />
+            app:layout_constraintTop_toBottomOf="@+id/view6" />
 
         <TextView
             android:id="@+id/tv_tanggal_selesai"
@@ -190,7 +222,7 @@
             app:layout_constraintTop_toTopOf="@+id/tanggal_selesai" />
 
         <View
-            android:id="@+id/view6"
+            android:id="@+id/view7"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_marginTop="4dp"
@@ -207,7 +239,7 @@
             android:layout_marginTop="10dp"
             android:text="Status Bayar :"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view6" />
+            app:layout_constraintTop_toBottomOf="@+id/view7" />
 
         <TextView
             android:id="@+id/tv_status_bayar"
@@ -221,7 +253,7 @@
             app:layout_constraintTop_toTopOf="@+id/status_bayar" />
 
         <View
-            android:id="@+id/view7"
+            android:id="@+id/view8"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_marginTop="4dp"
@@ -238,7 +270,7 @@
             android:layout_marginTop="10dp"
             android:text="Status Barang :"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view7" />
+            app:layout_constraintTop_toBottomOf="@+id/view8" />
 
         <TextView
             android:id="@+id/tv_status_barang"
@@ -252,7 +284,7 @@
             app:layout_constraintTop_toTopOf="@+id/status_barang" />
 
         <View
-            android:id="@+id/view8"
+            android:id="@+id/view9"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_marginTop="4dp"
@@ -269,7 +301,7 @@
             android:layout_marginTop="10dp"
             android:text="Berat :"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view8" />
+            app:layout_constraintTop_toBottomOf="@+id/view9" />
 
         <TextView
             android:id="@+id/tv_berat"
@@ -283,7 +315,7 @@
             app:layout_constraintTop_toTopOf="@+id/berat" />
 
         <View
-            android:id="@+id/view9"
+            android:id="@+id/view10"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_marginTop="4dp"
@@ -300,7 +332,7 @@
             android:layout_marginTop="10dp"
             android:text="Total Harga :"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view9" />
+            app:layout_constraintTop_toBottomOf="@+id/view10" />
 
         <TextView
             android:id="@+id/tv_harga"
@@ -314,7 +346,7 @@
             app:layout_constraintTop_toTopOf="@+id/harga" />
 
         <View
-            android:id="@+id/view10"
+            android:id="@+id/view11"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_marginTop="4dp"
@@ -331,7 +363,7 @@
             android:layout_marginTop="10dp"
             android:text="Komplen :"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view10" />
+            app:layout_constraintTop_toBottomOf="@+id/view11" />
 
         <TextView
             android:id="@+id/tv_komplen"
@@ -346,7 +378,7 @@
             app:layout_constraintTop_toTopOf="@+id/komplen" />
 
         <View
-            android:id="@+id/view11"
+            android:id="@+id/view12"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_marginTop="4dp"
@@ -363,7 +395,7 @@
             android:layout_marginTop="10dp"
             android:text="Bukti Bayar :"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view11" />
+            app:layout_constraintTop_toBottomOf="@+id/view12" />
 
         <androidx.cardview.widget.CardView
             android:layout_width="300dp"
@@ -378,8 +410,7 @@
                 android:id="@+id/img_payment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:contentDescription="@string/img"
-                android:src="@drawable/ic_launcher_background" />
+                android:contentDescription="@string/img" />
 
         </androidx.cardview.widget.CardView>
 

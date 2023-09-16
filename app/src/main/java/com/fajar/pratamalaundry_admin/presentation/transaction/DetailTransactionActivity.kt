@@ -17,7 +17,8 @@ import retrofit2.*
 class DetailTransactionActivity : AppCompatActivity() {
 
     private lateinit var _binding: ActivityDetailTransactionBinding
-    private var baseUrl = "http://192.168.1.5/api-laundry"
+    //    private var baseUrl = "http://192.168.1.5/api-laundry"
+    private var baseUrl = "https://pratamalaundry.my.id/"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +44,7 @@ class DetailTransactionActivity : AppCompatActivity() {
                     val detailTransaksi = response.body()?.data
                     detailTransaksi?.let {
                         _binding.tvNameCustomer.text = it.namaPelanggan
+                        _binding.tvNoTelp.text = it.no_telp
                         _binding.tvAlamat.text = it.alamatPelanggan
                         _binding.tvNameProduct.text = it.namaProduk
                         _binding.tvService.text = it.service

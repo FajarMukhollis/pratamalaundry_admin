@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">pratamalaundry_admin</string>
+    <string name="app_name">Pratama Laundry Admin</string>
     <string name="failed_login">Login Gagal</string>
     <string name="not_found">Username atau Passowrd Tidak ditemukan\n</string>
     <string name="empty_username">Username Kosong</string>
