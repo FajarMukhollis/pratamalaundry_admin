@@ -56,7 +56,7 @@ class DetailTransactionActivity : AppCompatActivity() {
                         _binding.tvHarga.text = it.totalHarga
                         _binding.tvKomplen.text = it.komplen
                         Glide.with(this@DetailTransactionActivity)
-                            .load("$baseUrl /img_payment/${it.buktiBayar}")
+                            .load("$baseUrl/img_payment/${it.buktiBayar}")
                             .into(_binding.imgPayment)
                     }
                     Toast.makeText(

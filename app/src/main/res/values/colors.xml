@@ -13,4 +13,6 @@
     <color name="background">#F0F0F0</color>
     <color name="green">#04BFAD</color>
     <color name="underline">#D8D6D6</color>
+    <color name="backgroundLight">#F0F0F0</color>
+    <color name="backgroundNight">#232323</color>
 </resources>

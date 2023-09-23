@@ -62,6 +62,37 @@ class TransactionActivity : AppCompatActivity() {
 
     }
 
+    //notification
+/*    private fun showNotification() {
+        val channelId = "Pratama Laundry"
+        val channelName = "Pratama Laundry"
+        val intent = Intent(this, TransactionActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent, FLAG_UPDATE_CURRENT)
+        val notificationManagerCompat =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val builder = NotificationCompat.Builder(this, channelId)
+            .setContentTitle("Pratama Laundry")
+            .setContentText("Terdapat Transaksi Baru")
+            .setSmallIcon(R.drawable.ic_notifications)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                channelId,
+                channelName,
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            builder.setChannelId(channelId)
+            notificationManagerCompat.createNotificationChannel(channel)
+        }
+        val notification = builder.build()
+        notificationManagerCompat.notify(0, notification)
+    }*/
+
+    //end notification
+
     private fun showTransaction() {
         transactionViewModel.getTransaction()
         transactionViewModel.errorMessage.observe(this, Observer {

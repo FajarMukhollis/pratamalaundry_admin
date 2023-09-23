@@ -371,7 +371,7 @@
             android:layout_width="0dp"
             android:layout_marginStart="80dp"
             android:layout_height="wrap_content"
-            android:text="isi komplen"
+            android:text="Tidak Ada Komplen"
             app:layout_constraintEnd_toEndOf="parent"
             android:gravity="right"
             app:layout_constraintStart_toEndOf="@+id/komplen"

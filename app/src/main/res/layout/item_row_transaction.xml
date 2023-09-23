@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/shadow"
-        android:paddingBottom="3dp"
+        android:paddingBottom="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,7 +29,8 @@
 
             <TextView
                 android:id="@+id/tv_date_order"
-                style="@style/textNormal"
+                style="@style/itemRowText"
+                android:textColor="@color/black"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:text="tanggal"
@@ -41,6 +42,7 @@
                 style="@style/textNormal"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:textColor="@color/black"
                 android:layout_marginTop="10dp"
                 android:text="nama pelanggan"
                 app:layout_constraintStart_toStartOf="parent"
@@ -53,6 +55,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
                 android:text="Rp."
+                android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_name_customer" />
 
@@ -63,6 +66,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="3dp"
                 android:text="Total harga"
+                android:textColor="@color/black"
                 app:layout_constraintStart_toEndOf="@+id/tv_rp"
                 app:layout_constraintTop_toTopOf="@+id/tv_rp" />
 
@@ -73,6 +77,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
                 android:text="Status Barang"
+                android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_rp" />
 
@@ -83,6 +88,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
                 android:text="Status Bayar"
+                android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_status_barang" />
 

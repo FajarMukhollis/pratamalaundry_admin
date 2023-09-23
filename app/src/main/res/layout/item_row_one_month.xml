@@ -6,7 +6,7 @@
 
     <TextView
         android:id="@+id/tv_date_order"
-        style="@style/textNormal"
+        style="@style/itemRowText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="tanggal"
@@ -15,7 +15,7 @@
 
     <TextView
         android:id="@+id/tv_name_customer"
-        style="@style/textNormal"
+        style="@style/itemRowText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
@@ -25,7 +25,7 @@
 
     <TextView
         android:id="@+id/tv_name_product"
-        style="@style/textNormal"
+        style="@style/itemRowText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
@@ -35,7 +35,7 @@
 
     <TextView
         android:id="@+id/tv_total_price"
-        style="@style/textNormal"
+        style="@style/itemRowText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="12dp"
