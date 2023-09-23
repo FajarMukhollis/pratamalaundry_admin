@@ -71,7 +71,7 @@ class TransactionViewModel : ViewModel() {
                     _errorMessage.value = "Data Transaksi Pelanggan BERHASIL Di Hapus"
                     val newDataList = _transactions.value?.toMutableList()
                     newDataList?.removeAll { it.id_transaksi == id_transaksi }
-                    getTransaction()
+                    _transactions.value = newDataList!!
                 } else {
                     showLoading(false)
                     _errorMessage.value = "Gagal menghapus data"
