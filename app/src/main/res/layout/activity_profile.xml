@@ -39,19 +39,18 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/container"
             android:padding="10dp"
-
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
             <TextView
                 android:id="@+id/nama"
-                android:layout_width="70dp"
-                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
                 android:text="@string/name"
                 android:textColor="@color/black"
                 style="@style/textNormal"
-
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -59,12 +58,15 @@
             <TextView
                 android:id="@+id/tvNama"
                 style="@style/textNormal"
-                android:textColor="@color/black"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_marginStart="100dp"
                 android:text="@string/name"
+                android:gravity="center|right"
+                android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@+id/nama"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/nama"
                 app:layout_constraintTop_toTopOf="@+id/nama" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -82,8 +84,9 @@
 
             <TextView
                 android:id="@+id/username"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:text="@string/txtUsername"
                 style="@style/textNormal"
                 android:textColor="@color/black"
@@ -95,10 +98,11 @@
                 android:id="@+id/tvUsername"
                 style="@style/textNormal"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="70dp"
                 android:text="@string/txtUsername"
                 android:textColor="@color/black"
+                android:gravity="center|right"
                 app:layout_constraintBottom_toBottomOf="@+id/username"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/username"
@@ -120,7 +124,8 @@
             <TextView
                 android:id="@+id/password"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
                 android:text="@string/password"
                 android:textColor="@color/black"
                 style="@style/textNormal"
@@ -132,14 +137,16 @@
                 android:id="@+id/tvPassword"
                 style="@style/textNormal"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="70dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="75dp"
                 android:textColor="@color/black"
                 android:text="@string/encryp"
+                android:gravity="center|right"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/password"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="RtlHardcoded" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
