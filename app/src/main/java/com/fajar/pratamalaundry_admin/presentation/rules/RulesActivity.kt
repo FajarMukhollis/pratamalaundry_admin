@@ -48,7 +48,7 @@ class RulesActivity : AppCompatActivity() {
             when (view.getId()) {
                 R.id.rules_asosiasi ->
                     if (checked) {
-                        toOneWeeks()
+                        toRulesAsosiasi()
                     }
                 R.id.rules_komplain ->
                     if (checked) {
@@ -58,8 +58,8 @@ class RulesActivity : AppCompatActivity() {
         }
     }
 
-    private fun toOneWeeks() {
-        val toOneWeeks = Intent(this, OneWeeksActivity::class.java)
+    private fun toRulesAsosiasi() {
+        val toOneWeeks = Intent(this, RulesAsosiasiActivity::class.java)
         startActivity(toOneWeeks)
 
     }

@@ -19,6 +19,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="34">
         <activity
+            android:name=".presentation.rules.RulesAsosiasiActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.rules.RulesActivity"
             android:exported="false" />
         <activity

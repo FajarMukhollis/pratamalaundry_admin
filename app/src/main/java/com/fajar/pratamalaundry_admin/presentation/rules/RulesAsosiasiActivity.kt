@@ -12,41 +12,49 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fajar.pratamalaundry_admin.R
-import com.fajar.pratamalaundry_admin.databinding.ActivityRulesKomplainBinding
+import com.fajar.pratamalaundry_admin.databinding.ActivityRulesAsosiasiBinding
 import com.fajar.pratamalaundry_admin.model.remote.ApiConfig
+import com.fajar.pratamalaundry_admin.model.request.AddRulesAsosiasiRequest
 import com.fajar.pratamalaundry_admin.model.request.AddRulesKomplainRequest
+import com.fajar.pratamalaundry_admin.model.request.DeleteRulesAsosiasiRequest
 import com.fajar.pratamalaundry_admin.model.request.DeleteRulesKomplainRequest
+import com.fajar.pratamalaundry_admin.model.request.EditRulesAsosiasiRequest
 import com.fajar.pratamalaundry_admin.model.request.EditRulesKomplainRequest
+import com.fajar.pratamalaundry_admin.model.response.AddRulesAsosiasiResponse
 import com.fajar.pratamalaundry_admin.model.response.AddRulesKomplainResponse
+import com.fajar.pratamalaundry_admin.model.response.DeleteRulesAsosiasiResponse
 import com.fajar.pratamalaundry_admin.model.response.DeleteRulesKomplainResponse
+import com.fajar.pratamalaundry_admin.model.response.EditRulesAsosiasiResponse
 import com.fajar.pratamalaundry_admin.model.response.EditRulesKomplainResponse
+import com.fajar.pratamalaundry_admin.model.response.RulesAsosiasiResponse
 import com.fajar.pratamalaundry_admin.model.response.RulesKomplainResponse
+import com.fajar.pratamalaundry_admin.presentation.adapter.RulesAsosiasiAdapter
 import com.fajar.pratamalaundry_admin.presentation.adapter.RulesKomplainAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class RulesKomplainActivity : AppCompatActivity() {
+class RulesAsosiasiActivity : AppCompatActivity() {
 
-    private lateinit var _binding: ActivityRulesKomplainBinding
-    private lateinit var adapterRulesKomplain: RulesKomplainAdapter
+    private lateinit var _binding: ActivityRulesAsosiasiBinding
+    private lateinit var rulesAsosiasiAdapter: RulesAsosiasiAdapter
     private var selectedItemPosition: Int = -1
-    private lateinit var selectedRules: RulesKomplainResponse.DataRulesKomplain
+    private lateinit var selectedRules: RulesAsosiasiResponse.DataRulesAsosiasi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = ActivityRulesKomplainBinding.inflate(layoutInflater)
+        _binding = ActivityRulesAsosiasiBinding.inflate(layoutInflater)
         setContentView(_binding.root)
 
         setActionBar()
         hideFab()
         initRecyclerView()
-        getDataRulesKomplain()
+        getDataRulesAsosiasi()
         addRules()
 
         val swipeRefresh = _binding.swipeRefreshLayout
         swipeRefresh.setOnRefreshListener {
-            getDataRulesKomplain()
+            getDataRulesAsosiasi()
             swipeRefresh.isRefreshing = false
         }
     }
@@ -89,57 +97,57 @@ class RulesKomplainActivity : AppCompatActivity() {
     }
 
     private fun initRecyclerView() {
-        val rvRulesKomplain = _binding.recyclerRules
-        adapterRulesKomplain = RulesKomplainAdapter(arrayListOf())
-        adapterRulesKomplain.setOnItemClickListener(object :
-            RulesKomplainAdapter.OnItemClickListener {
+        val rvRulesAsosasi = _binding.recyclerRules
+        rulesAsosiasiAdapter = RulesAsosiasiAdapter(arrayListOf())
+        rulesAsosiasiAdapter.setOnItemClickListener(object :
+            RulesAsosiasiAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
                 showDeleteRulesForm(position)
             }
         })
 
-        adapterRulesKomplain.setOnEditClickListener(object :
-            RulesKomplainAdapter.OnEditClickListener {
+        rulesAsosiasiAdapter.setOnEditClickListener(object :
+            RulesAsosiasiAdapter.OnEditClickListener {
             override fun onEditClick(position: Int) {
                 selectedItemPosition = position
-                selectedRules = adapterRulesKomplain.getItem(position)
+                selectedRules = rulesAsosiasiAdapter.getItem(position)
                 showEditRulesForm(position)
             }
         })
 
-        rvRulesKomplain.apply {
-            layoutManager = LinearLayoutManager(this@RulesKomplainActivity)
+        rvRulesAsosasi.apply {
+            layoutManager = LinearLayoutManager(this@RulesAsosiasiActivity)
             val decoration =
-                DividerItemDecoration(this@RulesKomplainActivity, DividerItemDecoration.VERTICAL)
+                DividerItemDecoration(this@RulesAsosiasiActivity, DividerItemDecoration.VERTICAL)
             addItemDecoration(decoration)
-            adapter = adapterRulesKomplain
+            adapter = rulesAsosiasiAdapter
             setHasFixedSize(true)
         }
     }
 
-    private fun getDataRulesKomplain() {
+    private fun getDataRulesAsosiasi() {
         val retroInstance = ApiConfig.getApiService()
-        val call = retroInstance.getRulesKomplain()
-        call.enqueue(object : Callback<RulesKomplainResponse> {
+        val call = retroInstance.getRulesAsosiasi()
+        call.enqueue(object : Callback<RulesAsosiasiResponse> {
             override fun onResponse(
-                call: Call<RulesKomplainResponse>,
-                response: Response<RulesKomplainResponse>
+                call: Call<RulesAsosiasiResponse>,
+                response: Response<RulesAsosiasiResponse>
             ) {
                 showLoading(false)
                 if (response.isSuccessful) {
                     val dataRules = response.body()?.data
                     if (dataRules != null) {
-                        adapterRulesKomplain.setData(dataRules)
+                        rulesAsosiasiAdapter.setData(dataRules)
                     }
                     Toast.makeText(
-                        this@RulesKomplainActivity,
+                        this@RulesAsosiasiActivity,
                         "Data Berhasil DiTemukan",
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
                     showLoading(false)
                     Toast.makeText(
-                        this@RulesKomplainActivity,
+                        this@RulesAsosiasiActivity,
                         "Data Tidak Ditemukan",
                         Toast.LENGTH_SHORT
                     ).show()
@@ -147,20 +155,21 @@ class RulesKomplainActivity : AppCompatActivity() {
 
             }
 
-            override fun onFailure(call: Call<RulesKomplainResponse>, t: Throwable) {
+            override fun onFailure(call: Call<RulesAsosiasiResponse>, t: Throwable) {
                 Toast.makeText(
-                    this@RulesKomplainActivity,
+                    this@RulesAsosiasiActivity,
                     "Periksa Koneksi Internet Anda",
                     Toast.LENGTH_SHORT
                 ).show()
             }
 
         })
+
     }
 
     private fun showEditRulesForm(position: Int) {
         val editRulesDialog = AlertDialog.Builder(this)
-            .setTitle("Edit Aturan Layanan Komplain")
+            .setTitle("Edit Aturan Asosiasi")
             .setView(R.layout.dialog_edit_rules)
             .setPositiveButton("Simpan", null)
             .setNegativeButton("Batal", null)
@@ -170,39 +179,39 @@ class RulesKomplainActivity : AppCompatActivity() {
             val idRules = editRulesDialog.findViewById<TextView>(R.id.tvIdRules)
             val etRules = editRulesDialog.findViewById<EditText>(R.id.et_rules)
 
-            idRules?.text = selectedRules.idRulesKomplain
+            idRules?.text = selectedRules.idRulesAsosiasi
             etRules?.setText(selectedRules.aturan)
 
             val saveButton = editRulesDialog.getButton(AlertDialog.BUTTON_POSITIVE)
             saveButton.setOnClickListener {
-                val idRules = selectedRules.idRulesKomplain
+                val idRules = selectedRules.idRulesAsosiasi
                 val rules = etRules?.text.toString()
 
-                val req = EditRulesKomplainRequest(
+                val req = EditRulesAsosiasiRequest(
                     idRules,
                     rules
                 )
 
                 if (rules.isNotEmpty() && idRules.isNotEmpty()) {
                     val retroInstance = ApiConfig.getApiService()
-                    val call = retroInstance.editRulesKomplain(req)
-                    call.enqueue(object : Callback<EditRulesKomplainResponse> {
+                    val call = retroInstance.editRulesAsosiasi(req)
+                    call.enqueue(object : Callback<EditRulesAsosiasiResponse> {
                         override fun onResponse(
-                            call: Call<EditRulesKomplainResponse>,
-                            response: Response<EditRulesKomplainResponse>
+                            call: Call<EditRulesAsosiasiResponse>,
+                            response: Response<EditRulesAsosiasiResponse>
                         ) {
                             showLoading(false)
                             if (response.isSuccessful) {
                                 Toast.makeText(
-                                    this@RulesKomplainActivity,
+                                    this@RulesAsosiasiActivity,
                                     "Data Berhasil Diubah",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                getDataRulesKomplain()
+                                getDataRulesAsosiasi()
                             } else {
                                 showLoading(false)
                                 Toast.makeText(
-                                    this@RulesKomplainActivity,
+                                    this@RulesAsosiasiActivity,
                                     "Data Gagal Diubah",
                                     Toast.LENGTH_SHORT
                                 ).show()
@@ -210,11 +219,11 @@ class RulesKomplainActivity : AppCompatActivity() {
                         }
 
                         override fun onFailure(
-                            call: Call<EditRulesKomplainResponse>,
+                            call: Call<EditRulesAsosiasiResponse>,
                             t: Throwable
                         ) {
                             Toast.makeText(
-                                this@RulesKomplainActivity,
+                                this@RulesAsosiasiActivity,
                                 "Periksa Koneksi Internet Anda",
                                 Toast.LENGTH_SHORT
                             ).show()
@@ -224,7 +233,7 @@ class RulesKomplainActivity : AppCompatActivity() {
                     dialog.dismiss()
                 } else {
                     Toast.makeText(
-                        this@RulesKomplainActivity,
+                        this@RulesAsosiasiActivity,
                         "Isi Kolom Terlebih Dahulu",
                         Toast.LENGTH_SHORT
                     ).show()
@@ -237,12 +246,12 @@ class RulesKomplainActivity : AppCompatActivity() {
     }
 
     private fun showDeleteRulesForm(position: Int) {
-        val rules = adapterRulesKomplain.getItem(position)
+        val rules = rulesAsosiasiAdapter.getItem(position)
         AlertDialog.Builder(this)
-            .setTitle("Hapus Aturan Layanan Komplain")
-            .setMessage("Apakah Anda Yakin Ingin Menghapus Aturan Komplain No. ${rules.idRulesKomplain}?")
+            .setTitle("Hapus Aturan Asosiasi")
+            .setMessage("Apakah Anda Yakin Ingin Menghapus Aturan Komplain No. ${rules.idRulesAsosiasi}?")
             .setPositiveButton("Hapus") { dialog, _ ->
-                deleteRules(rules.idRulesKomplain)
+                deleteRules(rules.idRulesAsosiasi)
                 dialog.dismiss()
             }
             .setNegativeButton("Batal") { dialog, _ ->
@@ -253,37 +262,37 @@ class RulesKomplainActivity : AppCompatActivity() {
 
     private fun deleteRules(position: String) {
         showLoading(true)
-        val req = DeleteRulesKomplainRequest(
-            id_rules_komplain = position
+        val req = DeleteRulesAsosiasiRequest(
+            id_rules_asosiasi = position
         )
 
         val retroInstance = ApiConfig.getApiService()
-        val call = retroInstance.deleteRulesKomplain(req)
-        call.enqueue(object : Callback<DeleteRulesKomplainResponse> {
+        val call = retroInstance.deleteRulesAsosiasi(req)
+        call.enqueue(object : Callback<DeleteRulesAsosiasiResponse> {
             override fun onResponse(
-                call: Call<DeleteRulesKomplainResponse>,
-                response: Response<DeleteRulesKomplainResponse>
+                call: Call<DeleteRulesAsosiasiResponse>,
+                response: Response<DeleteRulesAsosiasiResponse>
             ) {
                 showLoading(false)
                 if (response.isSuccessful) {
                     Toast.makeText(
-                        this@RulesKomplainActivity,
+                        this@RulesAsosiasiActivity,
                         "Data Berhasil Di Hapus",
                         Toast.LENGTH_SHORT
                     ).show()
-                    getDataRulesKomplain()
+                    getDataRulesAsosiasi()
                 } else {
                     Toast.makeText(
-                        this@RulesKomplainActivity,
+                        this@RulesAsosiasiActivity,
                         "Data Gagal Di Hapus",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
             }
 
-            override fun onFailure(call: Call<DeleteRulesKomplainResponse>, t: Throwable) {
+            override fun onFailure(call: Call<DeleteRulesAsosiasiResponse>, t: Throwable) {
                 Toast.makeText(
-                    this@RulesKomplainActivity,
+                    this@RulesAsosiasiActivity,
                     "Periksa Koneksi Internet Anda",
                     Toast.LENGTH_SHORT
                 ).show()
@@ -297,7 +306,7 @@ class RulesKomplainActivity : AppCompatActivity() {
         val fabAdd = _binding.fabAdd
         fabAdd.setOnClickListener {
             val addRulesDialog = AlertDialog.Builder(this)
-                .setTitle("Tambah Aturan Layanan Komplain")
+                .setTitle("Tambah Aturan Asosiasi")
                 .setView(R.layout.dialog_add_rules)
                 .setPositiveButton("Tambahkan", null)
                 .setNegativeButton("Batal", null)
@@ -309,37 +318,40 @@ class RulesKomplainActivity : AppCompatActivity() {
                 saveButton.setOnClickListener {
                     val etAturan = addRulesDialog.findViewById<EditText>(R.id.et_rules)
                     val aturan = etAturan?.text.toString()
-                    val req = AddRulesKomplainRequest(
+                    val req = AddRulesAsosiasiRequest(
                         aturan = aturan
                     )
                     if (aturan.isNotEmpty()) {
                         val retroInstance = ApiConfig.getApiService()
-                        val call = retroInstance.addRulesKomplain(req)
-                        call.enqueue(object : Callback<AddRulesKomplainResponse> {
+                        val call = retroInstance.addRulesAsosiasi(req)
+                        call.enqueue(object : Callback<AddRulesAsosiasiResponse> {
                             override fun onResponse(
-                                call: Call<AddRulesKomplainResponse>,
-                                response: Response<AddRulesKomplainResponse>
+                                call: Call<AddRulesAsosiasiResponse>,
+                                response: Response<AddRulesAsosiasiResponse>
                             ) {
                                 showLoading(false)
                                 if (response.isSuccessful) {
                                     Toast.makeText(
-                                        this@RulesKomplainActivity,
+                                        this@RulesAsosiasiActivity,
                                         "Data Berhasil Di Tambahkan",
                                         Toast.LENGTH_SHORT
                                     ).show()
-                                    getDataRulesKomplain()
+                                    getDataRulesAsosiasi()
                                 } else {
                                     Toast.makeText(
-                                        this@RulesKomplainActivity,
+                                        this@RulesAsosiasiActivity,
                                         "Data Gagal Di Tambahkan",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
                             }
 
-                            override fun onFailure(call: Call<AddRulesKomplainResponse>, t: Throwable) {
+                            override fun onFailure(
+                                call: Call<AddRulesAsosiasiResponse>,
+                                t: Throwable
+                            ) {
                                 Toast.makeText(
-                                    this@RulesKomplainActivity,
+                                    this@RulesAsosiasiActivity,
                                     "Periksa Koneksi Internet Anda",
                                     Toast.LENGTH_SHORT
                                 ).show()
@@ -348,7 +360,7 @@ class RulesKomplainActivity : AppCompatActivity() {
                         dialog.dismiss()
                     } else {
                         Toast.makeText(
-                            this@RulesKomplainActivity,
+                            this@RulesAsosiasiActivity,
                             "Isi Kolom Terlebih Dahulu",
                             Toast.LENGTH_SHORT
                         ).show()
