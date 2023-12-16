@@ -13,6 +13,7 @@ import com.fajar.pratamalaundry_admin.databinding.ActivityMainBinding
 import com.fajar.pratamalaundry_admin.presentation.product.ProductActivity
 import com.fajar.pratamalaundry_admin.presentation.profile.ProfileActivity
 import com.fajar.pratamalaundry_admin.presentation.recap.RecapActivity
+import com.fajar.pratamalaundry_admin.presentation.rules.RulesActivity
 import com.fajar.pratamalaundry_admin.presentation.transaction.TransactionActivity
 import com.fajar.pratamalaundry_admin.viewmodel.ViewModelFactory
 
@@ -44,6 +45,10 @@ class MainActivity : AppCompatActivity() {
 
         _binding.conRecap.setOnClickListener {
             toRecap()
+        }
+
+        _binding.conRules.setOnClickListener {
+            toRules()
         }
 
     }
@@ -80,5 +85,10 @@ class MainActivity : AppCompatActivity() {
     private fun setViewModel() {
         val factory = ViewModelFactory.getInstance(this, dataStore)
         mainViewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
+    }
+
+    private fun toRules(){
+        val moveToRules = Intent(this, RulesActivity::class.java)
+        startActivity(moveToRules)
     }
 }

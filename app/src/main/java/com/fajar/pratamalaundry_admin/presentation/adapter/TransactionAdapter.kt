@@ -33,8 +33,21 @@ class TransactionAdapter(private val results: ArrayList<TransactionResponse.Data
                     onItemClickListener.onItemClick(position)
                 }
             }
-        }
 
+            btn_delete.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onDeleteClickListener.onDeleteClick(position)
+                }
+            }
+
+            btn_update.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onEditClickListener.onEditClick(position)
+                }
+            }
+        }
     }
 
     override fun onBindViewHolder(holder: ViewHolderTransaction, position: Int) {
@@ -45,14 +58,6 @@ class TransactionAdapter(private val results: ArrayList<TransactionResponse.Data
             tv_total_price.text = result.total_harga
             tv_status_barang.text = result.status_barang
             tv_status_bayar.text = result.status_bayar
-
-            btn_delete.setOnClickListener {
-                onDeleteClickListener.onDeleteClick(position)
-            }
-
-            btn_update.setOnClickListener {
-                onEditClickListener.onEditClick(position)
-            }
         }
     }
 
@@ -61,18 +66,6 @@ class TransactionAdapter(private val results: ArrayList<TransactionResponse.Data
             LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_row_transaction, parent, false)
         )
-    }
-
-    fun removeItem(id_transaksi: String) {
-        val iterator = results.iterator()
-        while (iterator.hasNext()) {
-            val history = iterator.next()
-            if (history.id_transaksi == id_transaksi) {
-                iterator.remove()
-                notifyItemRemoved(results.indexOf(history))
-                break
-            }
-        }
     }
 
     override fun getItemCount(): Int = results.size
@@ -110,5 +103,4 @@ class TransactionAdapter(private val results: ArrayList<TransactionResponse.Data
     fun getItem(position: Int): TransactionResponse.Data {
         return results[position]
     }
-
 }

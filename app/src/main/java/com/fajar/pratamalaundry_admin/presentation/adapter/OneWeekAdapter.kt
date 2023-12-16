@@ -12,6 +12,8 @@ class OneWeekAdapter(
 ) : RecyclerView.Adapter<OneWeekAdapter.ViewHolderRecapOneWeek>(
 ) {
 
+    private var totalIncome: Int = 0
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderRecapOneWeek {
         return ViewHolderRecapOneWeek(
             LayoutInflater.from(parent.context).inflate(R.layout.item_row_one_week, parent, false)
@@ -28,6 +30,9 @@ class OneWeekAdapter(
             nameProduct.text = result.nama_produk
             totalPrice.text = result.total_harga
         }
+
+        val income = result.total_harga.toIntOrNull() ?: 0
+        totalIncome += income
     }
 
     inner class ViewHolderRecapOneWeek(view: View) : RecyclerView.ViewHolder(view) {

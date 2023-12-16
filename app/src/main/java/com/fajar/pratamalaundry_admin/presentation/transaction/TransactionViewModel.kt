@@ -10,6 +10,7 @@ import com.fajar.pratamalaundry_admin.model.response.DeleteHistoryResponse
 import com.fajar.pratamalaundry_admin.model.response.DetailTransaksiResponse
 import com.fajar.pratamalaundry_admin.model.response.EditHistoryResponse
 import com.fajar.pratamalaundry_admin.model.response.TransactionResponse
+import com.fajar.pratamalaundry_admin.presentation.adapter.TransactionAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,7 +25,6 @@ class TransactionViewModel : ViewModel() {
 
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> get() = _errorMessage
-
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -42,7 +42,6 @@ class TransactionViewModel : ViewModel() {
                 if (response.isSuccessful) {
                     _transactions.value = response.body()?.data
                     _errorMessage.value = "Data Transaksi Ditemukan"
-                    showLoading(false)
                 } else {
                     _errorMessage.value = "Tidak ada data transaksi"
                 }
@@ -52,7 +51,6 @@ class TransactionViewModel : ViewModel() {
                 showLoading(false)
                 _errorMessage.value = "Gagal memuat data: ${t.message}"
             }
-
         })
     }
 
@@ -66,23 +64,20 @@ class TransactionViewModel : ViewModel() {
                 call: Call<DeleteHistoryResponse>,
                 response: Response<DeleteHistoryResponse>
             ) {
+                showLoading(false)
                 if (response.isSuccessful) {
-                    showLoading(false)
                     _errorMessage.value = "Data Transaksi Pelanggan BERHASIL Di Hapus"
-                    val newDataList = _transactions.value?.toMutableList()
+                    val newDataList = transaction.value?.toMutableList()
                     newDataList?.removeAll { it.id_transaksi == id_transaksi }
                     _transactions.value = newDataList!!
                 } else {
-                    showLoading(false)
                     _errorMessage.value = "Gagal menghapus data"
                 }
-                showLoading(false)
             }
 
             override fun onFailure(call: Call<DeleteHistoryResponse>, t: Throwable) {
                 showLoading(false)
                 _errorMessage.value = "Gagal menghapus data: ${t.message}"
-
             }
         })
     }
@@ -107,8 +102,8 @@ class TransactionViewModel : ViewModel() {
                 call: Call<EditHistoryResponse>,
                 response: Response<EditHistoryResponse>
             ) {
+                showLoading(false)
                 if (response.isSuccessful) {
-                    showLoading(false)
                     _errorMessage.value = "Data Transaksi Pelanggan BERHASIL Di Ubah"
                     getTransaction()
                 } else {
@@ -123,7 +118,7 @@ class TransactionViewModel : ViewModel() {
         })
     }
 
-    fun showLoading(isLoading: Boolean) {
+    private fun showLoading(isLoading: Boolean) {
         _isLoading.value = isLoading
     }
 }

@@ -17,6 +17,7 @@ import com.fajar.pratamalaundry_admin.R
 import com.fajar.pratamalaundry_admin.databinding.ActivityProductBinding
 import com.fajar.pratamalaundry_admin.model.response.ProductResponse
 import com.fajar.pratamalaundry_admin.presentation.adapter.ProductAdapter
+import com.fajar.pratamalaundry_admin.viewmodel.ViewModelFactory
 
 class ProductActivity : AppCompatActivity() {
 
@@ -31,7 +32,7 @@ class ProductActivity : AppCompatActivity() {
         _binding = ActivityProductBinding.inflate(layoutInflater)
         setContentView(_binding.root)
 
-        productViewModel= ViewModelProvider(this).get(ProductViewModel::class.java)
+        productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
 
         productViewModel.isLoading.observe(this, Observer { Loading ->
             showLoading(Loading)
@@ -42,17 +43,17 @@ class ProductActivity : AppCompatActivity() {
             startActivity(Intent(this, AddProductActivity::class.java))
         }
 
-        val swipeRefresh = _binding.swipeRefreshLayout
-        swipeRefresh.setOnRefreshListener {
-            productViewModel.fetchProducts()
-            swipeRefresh.isRefreshing = false
-        }
-
         initRecyclerView()
         observeProductData()
         productViewModel.fetchProducts()
         setActionBar()
         hideFab()
+
+        val swipeRefresh = _binding.swipeRefreshLayout
+        swipeRefresh.setOnRefreshListener {
+            productViewModel.fetchProducts()
+            swipeRefresh.isRefreshing = false
+        }
     }
 
     private fun setActionBar() {
@@ -66,6 +67,7 @@ class ProductActivity : AppCompatActivity() {
                 onBackPressed()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -101,13 +103,15 @@ class ProductActivity : AppCompatActivity() {
     private fun initRecyclerView() {
         val rvProduct = _binding.recylerProduct
         adapterProduct = ProductAdapter(arrayListOf())
-        adapterProduct.setOnItemClickListener(object : ProductAdapter.OnItemClickListener {
+        adapterProduct.setOnItemClickListener(object :
+            ProductAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
                 showDeleteConfirmationDialog(position)
             }
         })
 
-        adapterProduct.setOnEditClickListener(object : ProductAdapter.OnEditClickListener {
+        adapterProduct.setOnEditClickListener(object :
+            ProductAdapter.OnEditClickListener {
             override fun onEditClick(position: Int) {
                 selectedItemPosition = position
                 selectedProduct = adapterProduct.getItem(position)
@@ -117,7 +121,8 @@ class ProductActivity : AppCompatActivity() {
 
         rvProduct.apply {
             layoutManager = LinearLayoutManager(this@ProductActivity)
-            val decoration = DividerItemDecoration(this@ProductActivity, DividerItemDecoration.VERTICAL)
+            val decoration =
+                DividerItemDecoration(this@ProductActivity, DividerItemDecoration.VERTICAL)
             addItemDecoration(decoration)
             adapter = adapterProduct
             setHasFixedSize(true)
@@ -127,13 +132,13 @@ class ProductActivity : AppCompatActivity() {
     private fun showDeleteConfirmationDialog(position: Int) {
         val product = adapterProduct.getItem(position)
         AlertDialog.Builder(this)
-            .setTitle("Delete Product")
-            .setMessage("Are you sure you want to delete this product?")
-            .setPositiveButton("Delete") { dialog, _ ->
+            .setTitle("Hapus Produk")
+            .setMessage("Apa anda yakin untuk menghapus data ini?")
+            .setPositiveButton("Hapus") { dialog, _ ->
                 productViewModel.deleteProduct(product.id_product)
                 dialog.dismiss()
             }
-            .setNegativeButton("Cancel") { dialog, _ ->
+            .setNegativeButton("Batal") { dialog, _ ->
                 dialog.dismiss()
             }
             .show()
@@ -143,16 +148,18 @@ class ProductActivity : AppCompatActivity() {
         val product = adapterProduct.getItem(position)
 
         val editProductDialog = AlertDialog.Builder(this)
-            .setTitle("Edit Product")
+            .setTitle("Edit Produk")
             .setView(R.layout.dialog_edit_product)
-            .setPositiveButton("Save", null)
-            .setNegativeButton("Cancel", null)
+            .setPositiveButton("Simpan", null)
+            .setNegativeButton("Batal", null)
             .create()
 
         editProductDialog.setOnShowListener { dialog ->
             val kategoriEditText = editProductDialog.findViewById<EditText>(R.id.et_kategori)
-            val namaProdukEditText = editProductDialog.findViewById<EditText>(R.id.et_edit_nama_produk)
-            val jenisServiceEditText = editProductDialog.findViewById<EditText>(R.id.et_edit_jenis_service)
+            val namaProdukEditText =
+                editProductDialog.findViewById<EditText>(R.id.et_edit_nama_produk)
+            val jenisServiceEditText =
+                editProductDialog.findViewById<EditText>(R.id.et_edit_jenis_service)
             val durasiEditText = editProductDialog.findViewById<EditText>(R.id.et_durasi)
             val hargaProdukEditText = editProductDialog.findViewById<EditText>(R.id.et_edit_harga)
             val satuanEditText = editProductDialog.findViewById<EditText>(R.id.et_satuan)
@@ -174,10 +181,22 @@ class ProductActivity : AppCompatActivity() {
                 val satuan = satuanEditText?.text.toString()
 
                 if (kategori.isNotEmpty() && namaProduk.isNotEmpty() && jenisService.isNotEmpty() && durasi.isNotEmpty() && hargaProduk.isNotEmpty() && satuan.isNotEmpty()) {
-                    productViewModel.editProduct(selectedProduct.id_product,kategori, namaProduk, jenisService, durasi, hargaProduk, satuan)
+                    productViewModel.editProduct(
+                        selectedProduct.id_product,
+                        kategori,
+                        namaProduk,
+                        jenisService,
+                        durasi,
+                        hargaProduk,
+                        satuan
+                    )
                     dialog.dismiss()
                 } else {
-                    Toast.makeText(this@ProductActivity, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@ProductActivity,
+                        "Please fill in all fields",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }

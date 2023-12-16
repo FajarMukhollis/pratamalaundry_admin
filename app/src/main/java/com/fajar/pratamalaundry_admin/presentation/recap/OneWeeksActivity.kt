@@ -62,7 +62,20 @@ class OneWeeksActivity : AppCompatActivity() {
     private fun observeOneWeekData() {
         recapViewModel.recapOneWeek.observe(this) { oneWeek ->
             adapterRecap.setData(oneWeek)
+
+            val totalIncome = calculateTotalIncome(oneWeek)
+            val totalIncomeText = "Rp. $totalIncome"
+            _binding.tvTotalAmount.text = totalIncomeText
         }
+    }
+
+    private fun calculateTotalIncome(oneWeek: List<OneWeeksResponse.OneWeek>?): Int {
+        var totalIncome = 0
+        oneWeek?.forEach { item ->
+            val price = item.total_harga.toIntOrNull() ?: 0
+            totalIncome += price
+        }
+        return totalIncome
     }
 
     private fun showData(data: OneWeeksResponse) {

@@ -10,6 +10,8 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -18,6 +20,7 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -42,7 +45,7 @@ class TransactionActivity : AppCompatActivity() {
     private lateinit var _binding: ActivityTransactionBinding
     private lateinit var transactionAdapter: TransactionAdapter
     private lateinit var transactionViewModel: TransactionViewModel
-    private lateinit var selectedDate: TransactionResponse.Data
+    private val CHANNEL_ID = "Pratama Laundry"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,44 +57,17 @@ class TransactionActivity : AppCompatActivity() {
         transactionViewModel.isLoading.observe(this, Observer { Loading ->
             showLoading(Loading)
         })
-
+        observeTransactionData()
         initRecyclerView()
         showTransaction()
-        observeTransactionData()
         setActionBar()
 
+        val swipeRefresh = _binding.swipeRefreshLayout
+        swipeRefresh.setOnRefreshListener {
+            showTransaction()
+            swipeRefresh.isRefreshing = false
+        }
     }
-
-    //notification
-/*    private fun showNotification() {
-        val channelId = "Pratama Laundry"
-        val channelName = "Pratama Laundry"
-        val intent = Intent(this, TransactionActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-        }
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent, FLAG_UPDATE_CURRENT)
-        val notificationManagerCompat =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val builder = NotificationCompat.Builder(this, channelId)
-            .setContentTitle("Pratama Laundry")
-            .setContentText("Terdapat Transaksi Baru")
-            .setSmallIcon(R.drawable.ic_notifications)
-            .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                channelId,
-                channelName,
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
-            builder.setChannelId(channelId)
-            notificationManagerCompat.createNotificationChannel(channel)
-        }
-        val notification = builder.build()
-        notificationManagerCompat.notify(0, notification)
-    }*/
-
-    //end notification
 
     private fun showTransaction() {
         transactionViewModel.getTransaction()
@@ -111,7 +87,6 @@ class TransactionActivity : AppCompatActivity() {
                 onBackPressed()
                 true
             }
-
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -150,10 +125,7 @@ class TransactionActivity : AppCompatActivity() {
         }
     }
 
-    private fun showData(data: TransactionResponse) {
-        val results = data.data
-        transactionAdapter.setData(results)
-    }
+
 
     private fun showLoading(loading: Boolean) {
         when (loading) {
@@ -165,18 +137,11 @@ class TransactionActivity : AppCompatActivity() {
     private fun showDeleteConfirmationDialog(position: Int) {
         val history = transactionAdapter.getItem(position)
         AlertDialog.Builder(this)
-            .setTitle("Delete Product")
-            .setMessage("Apakah Kamu yakin untuk menghapus data transaksi ini?")
+            .setTitle("Hapus Riwayat")
+            .setMessage("Apa anda yakin untuk menghapus data ini?")
             .setPositiveButton("Hapus") { dialog, _ ->
                 transactionViewModel.deleteTransaction(history.id_transaksi)
                 dialog.dismiss()
-                transactionViewModel.errorMessage.observe(this@TransactionActivity, Observer {
-                    Toast.makeText(
-                        this@TransactionActivity,
-                        "Data Berhasil Dihapus",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                })
             }
             .setNegativeButton("Batal") { dialog, _ ->
                 dialog.dismiss()
@@ -187,7 +152,7 @@ class TransactionActivity : AppCompatActivity() {
     private fun showEditProductForm(position: Int) {
         val history = transactionAdapter.getItem(position)
         val editHistoryDialog = AlertDialog.Builder(this)
-            .setTitle("Edit History")
+            .setTitle("Edit Riwayat")
             .setView(R.layout.dialog_edit_history)
             .setPositiveButton("Simpan", null)
             .setNegativeButton("Batal", null)
@@ -212,7 +177,6 @@ class TransactionActivity : AppCompatActivity() {
 
                 // Set selected item if needed
                 val initialStatusBayar = history.status_bayar
-                Log.d("EditHistoryDialog", "Initial Status Bayar: $initialStatusBayar")
                 val initialStatusBayarPosition = statusBayar.indexOf(initialStatusBayar)
                 if (initialStatusBayarPosition >= 0) {
                     spStatusBayar.setSelection(initialStatusBayarPosition)
@@ -257,4 +221,44 @@ class TransactionActivity : AppCompatActivity() {
             transactionAdapter.setData(transaction)
         }
     }
+
+    private fun checkAndNotifyNewTransactions(transactions: List<TransactionResponse.Data>) {
+        // Hitung jumlah transaksi sebelum dan sesudah pembaruan
+        val oldCount = transactionAdapter.itemCount
+        val newCount = transactions.size
+
+        // Jika ada transaksi baru, tampilkan notifikasi
+        if (newCount > oldCount) {
+            showNotification("Transaksi Baru", "Anda memiliki pesanan baru.")
+        }
+    }
+
+    private fun showNotification(title: String, message: String){
+        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_notifications)
+            .setContentTitle(title)
+            .setContentText(message)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+        with(NotificationManagerCompat.from(this)){
+            notify(1, builder.build())
+        }
+    }
+
+    private fun createNotificationChannel(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            val name = "Pratama Laundry"
+            val descriptionText = "Ada Pesanan Baru"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+                description = descriptionText
+            }
+
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
 }

@@ -20,7 +20,6 @@ import retrofit2.Response
 class AddProductActivity : AppCompatActivity() {
 
     private lateinit var _binding: ActivityAddProductBinding
-    private lateinit var adapterProduct: ProductAdapter
     private lateinit var productViewModel: ProductViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +30,7 @@ class AddProductActivity : AppCompatActivity() {
         productViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
 
         setActionBar()
+        productViewModel.fetchProducts()
         showLoading(false)
 
         _binding.btnAdd.setOnClickListener {

@@ -11,6 +11,7 @@ class OneMonthAdapter(
     private val results: MutableList<OneMonthResponse.OneMonth> = mutableListOf()
 ) : RecyclerView.Adapter<OneMonthAdapter.ViewHolderRecapOneMonth>() {
 
+    private var totalIncome: Int = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderRecapOneMonth {
         return ViewHolderRecapOneMonth(
@@ -28,6 +29,10 @@ class OneMonthAdapter(
             nameProduct.text = result.nama_produk
             totalPrice.text = result.total_harga
         }
+
+        //hitung total pemasukan
+        val income = result.total_harga.toIntOrNull() ?: 0
+        totalIncome += income
     }
 
     inner class ViewHolderRecapOneMonth(view: View) : RecyclerView.ViewHolder(view) {

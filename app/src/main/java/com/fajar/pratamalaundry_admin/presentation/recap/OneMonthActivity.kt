@@ -59,7 +59,20 @@ class OneMonthActivity : AppCompatActivity() {
     private fun observeOneMonthData() {
         recapViewModel.recapOneMonth.observe(this) { oneMonth ->
             adapterRecap.setData(oneMonth!!)
+
+            val totalIncome = calculateTotalIncome(oneMonth)
+            val totalIncomeText = "Rp. $totalIncome"
+            _binding.tvTotalAmount.text = totalIncomeText
         }
+    }
+
+    private fun calculateTotalIncome(oneMonth: List<OneMonthResponse.OneMonth>?): Int {
+        var totalIncome = 0
+        oneMonth?.forEach { item ->
+            val price = item.total_harga.toIntOrNull() ?: 0
+            totalIncome += price
+        }
+        return totalIncome
     }
 
     private fun initRecyclerView(){

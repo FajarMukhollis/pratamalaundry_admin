@@ -25,6 +25,9 @@ class ProductViewModel : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
+    private val _errorMessage = MutableLiveData<String>()
+    val errorMessage: LiveData<String> get() = _errorMessage
+
     fun fetchProducts() {
         showLoading(true)
         val retroInstance = ApiConfig.getApiService()
@@ -37,11 +40,16 @@ class ProductViewModel : ViewModel() {
                 showLoading(false)
                 if (response.isSuccessful) {
                     _products.value = response.body()?.data
+                    _errorMessage.value = "Berhasil menampilkan produk"
+                    showLoading(false)
+                } else {
+                    _errorMessage.value = "Gagal menampilkan produk"
                 }
             }
 
             override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
                 showLoading(false)
+                _errorMessage.value = "Gagal memuat data: ${t.message}"
             }
         })
     }
@@ -64,17 +72,22 @@ class ProductViewModel : ViewModel() {
                 response: Response<DeleteProductResponse>
             ) {
                 if (response.isSuccessful) {
-                    // handle success
-                    fetchProducts()
+                    _errorMessage.value = "Produk BERHASIL Di Hapus"
+                    val newDataList = _products.value?.toMutableList()
+                    newDataList?.removeAll { it.id_product == id_product }
+                    _products.value = newDataList!!
                 } else {
                     // handle failure
                     showLoading(false)
+                    _errorMessage.value = "Gagal menghapus data"
                 }
+                showLoading(false)
             }
 
             override fun onFailure(call: Call<DeleteProductResponse>, t: Throwable) {
                 // handle failure
                 showLoading(false)
+                _errorMessage.value = "Gagal menghapus data: ${t.message}"
             }
         })
     }
@@ -107,16 +120,18 @@ class ProductViewModel : ViewModel() {
             ) {
                 if (response.isSuccessful) {
                     // handle success
+                    _errorMessage.value = "Produk BERHASIL Di Ubah"
                     fetchProducts()
                 } else {
                     // handle failure
-                    showLoading(false)
+                    _errorMessage.value = "GAGAL mengubah data"
                 }
             }
 
             override fun onFailure(call: Call<EditProductResponse>, t: Throwable) {
                 // handle failure
                 showLoading(false)
+                _errorMessage.value = "Gagal mengubah data: ${t.message}"
             }
         })
     }
