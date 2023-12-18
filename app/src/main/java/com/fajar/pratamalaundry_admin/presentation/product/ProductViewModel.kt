@@ -94,9 +94,8 @@ class ProductViewModel : ViewModel() {
 
     fun editProduct(
         id_produk: String,
-        kategori: String,
+        id_kategori: String,
         nama_produk: String,
-        jenis_service: String,
         durasi: String,
         harga_produk: String,
         satuan: String
@@ -105,9 +104,8 @@ class ProductViewModel : ViewModel() {
         val retroInstance = ApiConfig.getApiService()
         val request = EditProductRequest(
             id_produk = id_produk,
-            kategori = kategori,
+            id_kategori = id_kategori,
             nama_produk = nama_produk,
-            jenis_service = jenis_service,
             durasi = durasi,
             harga_produk = harga_produk,
             satuan = satuan

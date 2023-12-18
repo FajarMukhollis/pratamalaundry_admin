@@ -1,36 +1,7 @@
 package com.fajar.pratamalaundry_admin.model.remote
 
-import com.fajar.pratamalaundry_admin.model.request.AddProductRequest
-import com.fajar.pratamalaundry_admin.model.request.AddRulesAsosiasiRequest
-import com.fajar.pratamalaundry_admin.model.request.AddRulesKomplainRequest
-import com.fajar.pratamalaundry_admin.model.request.DeleteHistoryRequest
-import com.fajar.pratamalaundry_admin.model.request.DeleteProductRequest
-import com.fajar.pratamalaundry_admin.model.request.DeleteRulesAsosiasiRequest
-import com.fajar.pratamalaundry_admin.model.request.EditHistoryRequest
-import com.fajar.pratamalaundry_admin.model.request.EditProductRequest
-import com.fajar.pratamalaundry_admin.model.request.EditRulesKomplainRequest
-import com.fajar.pratamalaundry_admin.model.request.LoginRequest
-import com.fajar.pratamalaundry_admin.model.request.DeleteRulesKomplainRequest
-import com.fajar.pratamalaundry_admin.model.request.EditRulesAsosiasiRequest
-import com.fajar.pratamalaundry_admin.model.response.AddProductResponse
-import com.fajar.pratamalaundry_admin.model.response.AddRulesAsosiasiResponse
-import com.fajar.pratamalaundry_admin.model.response.AddRulesKomplainResponse
-import com.fajar.pratamalaundry_admin.model.response.DeleteHistoryResponse
-import com.fajar.pratamalaundry_admin.model.response.DeleteProductResponse
-import com.fajar.pratamalaundry_admin.model.response.DeleteRulesAsosiasiResponse
-import com.fajar.pratamalaundry_admin.model.response.DeleteRulesKomplainResponse
-import com.fajar.pratamalaundry_admin.model.response.DetailTransaksiResponse
-import com.fajar.pratamalaundry_admin.model.response.EditHistoryResponse
-import com.fajar.pratamalaundry_admin.model.response.EditProductResponse
-import com.fajar.pratamalaundry_admin.model.response.EditRulesAsosiasiResponse
-import com.fajar.pratamalaundry_admin.model.response.EditRulesKomplainResponse
-import com.fajar.pratamalaundry_admin.model.response.LoginResponse
-import com.fajar.pratamalaundry_admin.model.response.OneMonthResponse
-import com.fajar.pratamalaundry_admin.model.response.OneWeeksResponse
-import com.fajar.pratamalaundry_admin.model.response.ProductResponse
-import com.fajar.pratamalaundry_admin.model.response.RulesAsosiasiResponse
-import com.fajar.pratamalaundry_admin.model.response.RulesKomplainResponse
-import com.fajar.pratamalaundry_admin.model.response.TransactionResponse
+import com.fajar.pratamalaundry_admin.model.request.*
+import com.fajar.pratamalaundry_admin.model.response.*
 import retrofit2.*
 import retrofit2.Response
 import retrofit2.http.Body
@@ -121,4 +92,21 @@ interface ApiService {
         @Body editRulesAsosiasiRequest: EditRulesAsosiasiRequest
     ): Call<EditRulesAsosiasiResponse>
 
+    @GET("get_category")
+    fun getCategory(): Call<GetCategoryResponse>
+
+    @PUT("admin/edit_category")
+    fun editCategory(
+        @Body editCategoryRequest: EditCategoryRequest
+    ): Call<CategoryResponse>
+
+    @HTTP(method = "DELETE", path = "admin/delete_category", hasBody = true)
+    fun deleteCategory(
+        @Body deleteCategoryRequest: DeleteCategoryRequest
+    ): Call<CategoryResponse>
+
+    @POST("admin/add_category")
+    fun addCategory(
+        @Body addCategoryRequest: AddCategoryRequest
+    ): Call<CategoryResponse>
 }

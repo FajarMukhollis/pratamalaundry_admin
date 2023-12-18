@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/transparent"
-    tools:context=".presentation.product.ProductActivity">
+    tools:context=".presentation.product.CategoryActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
@@ -24,18 +23,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/list_menu_service"
+            android:text="Kategori Produk"
             android:textColor="@color/white"
-            android:textSize="24sp" />
+            android:textSize="18sp" />
 
     </com.google.android.material.appbar.MaterialToolbar>
-
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:padding="6dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,10 +40,10 @@
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyler_product"
+            android:id="@+id/recycler_category"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            tools:listitem="@layout/item_row_product" />
+            tools:listitem="@layout/item_row_category" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

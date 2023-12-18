@@ -31,29 +31,28 @@
 
         </com.google.android.material.appbar.MaterialToolbar>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tv_kategori"
+        <TextView
+            android:id="@+id/tv_kategori_produk"
+            style="@style/textNormal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            style="@style/textNormal"
-            android:hint="Kategori"
-            android:inputType="text"
             android:padding="10dp"
-            android:selectAllOnFocus="true"
+            android:text="Kategori Produk:"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+        <Spinner
+            android:id="@+id/sp_kategori"
+            style="@style/textNormal"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:prompt="@string/product_category"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar"
-            tools:ignore="Autofill">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_kategori"
-                style="@style/InputTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
-        </com.google.android.material.textfield.TextInputLayout>
+            app:layout_constraintTop_toBottomOf="@+id/tv_kategori_produk" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tv_nama_produk"
@@ -67,33 +66,11 @@
             android:selectAllOnFocus="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_kategori"
+            app:layout_constraintTop_toBottomOf="@+id/sp_kategori"
             tools:ignore="Autofill">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_nama_produk"
-                style="@style/InputTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tv_service_produk"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:hint="Service Produk"
-            style="@style/textNormal"
-            android:inputType="text"
-            android:padding="10dp"
-            android:selectAllOnFocus="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_nama_produk"
-            tools:ignore="Autofill">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_service_produk"
                 style="@style/InputTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -111,7 +88,7 @@
             android:selectAllOnFocus="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_service_produk"
+            app:layout_constraintTop_toBottomOf="@+id/tv_nama_produk"
             tools:ignore="Autofill">
 
             <com.google.android.material.textfield.TextInputEditText

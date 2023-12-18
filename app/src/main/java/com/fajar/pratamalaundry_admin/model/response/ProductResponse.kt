@@ -16,14 +16,14 @@ data class ProductResponse(
         @SerializedName("id_produk")
         val id_product: String,
 
-        @SerializedName("kategori")
-        val kategori: String,
+        @SerializedName("id_kategori")
+        val id_kategori: String,
+
+        @SerializedName("jenis_kategori")
+        val jenis_kategori: String,
 
         @SerializedName("nama_produk")
         val nama_produk: String,
-
-        @SerializedName("jenis_service")
-        val jenis_service: String,
 
         @SerializedName("durasi")
         val durasi: String,

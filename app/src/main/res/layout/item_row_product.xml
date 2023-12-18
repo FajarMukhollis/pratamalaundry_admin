@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginHorizontal="3dp"
     android:layout_marginVertical="3dp"
-    app:cardElevation="12dp"
-    android:layout_marginBottom="10dp">
+    android:layout_marginBottom="10dp"
+    app:cardElevation="12dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,27 +21,26 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            android:stretchColumns="1,2,3,4"
+            android:stretchColumns="1,2,3,4,5"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_delete">
 
             <TableRow>
 
                 <TextView
-                    android:id="@+id/name_product"
+                    android:id="@+id/tv_category"
                     style="@style/TitleTheme"
-                    android:layout_width="100dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_column="1"
                     android:layout_marginStart="10dp"
                     android:paddingStart="10dp"
-                    android:text="@string/product_name" />
+                    android:text="Kategori" />
 
                 <TextView
-                    android:id="@+id/service"
+                    android:id="@+id/tv_produk"
                     style="@style/TitleTheme"
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
@@ -49,20 +49,29 @@
                     android:text="@string/service" />
 
                 <TextView
-                    android:id="@+id/harga"
+                    android:id="@+id/tv_durasi"
                     style="@style/TitleTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_column="3"
                     android:gravity="center"
+                    android:text="durasi" />
+
+                <TextView
+                    android:id="@+id/tv_harga"
+                    style="@style/TitleTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="4"
+                    android:gravity="center"
                     android:text="@string/harga" />
 
                 <TextView
-                    android:id="@+id/satuan"
+                    android:id="@+id/tv_satuan"
                     style="@style/TitleTheme"
-                    android:layout_width="10dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_column="4"
+                    android:layout_column="5"
                     android:layout_marginStart="3dp"
                     android:layout_marginEnd="18dp"
                     android:gravity="center"

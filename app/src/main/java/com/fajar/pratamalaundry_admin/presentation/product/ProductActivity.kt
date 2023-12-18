@@ -3,9 +3,12 @@ package com.fajar.pratamalaundry_admin.presentation.product
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.AdapterView
 import android.widget.EditText
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
@@ -15,9 +18,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fajar.pratamalaundry_admin.R
 import com.fajar.pratamalaundry_admin.databinding.ActivityProductBinding
+import com.fajar.pratamalaundry_admin.model.remote.ApiConfig
+import com.fajar.pratamalaundry_admin.model.response.GetCategoryResponse
 import com.fajar.pratamalaundry_admin.model.response.ProductResponse
+import com.fajar.pratamalaundry_admin.presentation.adapter.CategorySpinnerAdapter
 import com.fajar.pratamalaundry_admin.presentation.adapter.ProductAdapter
-import com.fajar.pratamalaundry_admin.viewmodel.ViewModelFactory
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ProductActivity : AppCompatActivity() {
 
@@ -26,6 +34,7 @@ class ProductActivity : AppCompatActivity() {
     private var selectedItemPosition: Int = -1
     private lateinit var selectedProduct: ProductResponse.Product
     private lateinit var productViewModel: ProductViewModel
+    private lateinit var categorySpinner: Spinner
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -155,37 +164,38 @@ class ProductActivity : AppCompatActivity() {
             .create()
 
         editProductDialog.setOnShowListener { dialog ->
-            val kategoriEditText = editProductDialog.findViewById<EditText>(R.id.et_kategori)
+            val spKategori = editProductDialog.findViewById<Spinner>(R.id.sp_kategori)
+            categorySpinner = spKategori ?: Spinner(this)
+            showCategorySpinner(categorySpinner)
+
+
             val namaProdukEditText =
                 editProductDialog.findViewById<EditText>(R.id.et_edit_nama_produk)
-            val jenisServiceEditText =
-                editProductDialog.findViewById<EditText>(R.id.et_edit_jenis_service)
             val durasiEditText = editProductDialog.findViewById<EditText>(R.id.et_durasi)
             val hargaProdukEditText = editProductDialog.findViewById<EditText>(R.id.et_edit_harga)
             val satuanEditText = editProductDialog.findViewById<EditText>(R.id.et_satuan)
 
-            kategoriEditText?.setText(selectedProduct.kategori)
+//            categorySpinner.setSelection(selectedItemPosition)
+            spKategori?.setSelection(getCategoryPosition(product.id_kategori, categorySpinner))
             namaProdukEditText?.setText(selectedProduct.nama_produk)
-            jenisServiceEditText?.setText(selectedProduct.jenis_service)
             durasiEditText?.setText(selectedProduct.durasi)
             hargaProdukEditText?.setText(selectedProduct.harga_produk)
             satuanEditText?.setText(selectedProduct.satuan)
 
             val saveButton = editProductDialog.getButton(AlertDialog.BUTTON_POSITIVE)
             saveButton.setOnClickListener {
-                val kategori = kategoriEditText?.text.toString()
+                val selectedCategory = categorySpinner.selectedItem as? GetCategoryResponse.DataCategory
+                val kategori = selectedCategory?.id_kategori ?: ""  //saya hanya ingin mengirimkan id_kategori nya saja
                 val namaProduk = namaProdukEditText?.text.toString()
-                val jenisService = jenisServiceEditText?.text.toString()
                 val durasi = durasiEditText?.text.toString()
                 val hargaProduk = hargaProdukEditText?.text.toString()
                 val satuan = satuanEditText?.text.toString()
-
-                if (kategori.isNotEmpty() && namaProduk.isNotEmpty() && jenisService.isNotEmpty() && durasi.isNotEmpty() && hargaProduk.isNotEmpty() && satuan.isNotEmpty()) {
+                Log.d("idKategori: ", kategori)
+                if (namaProduk.isNotEmpty() && kategori.isNotEmpty() && durasi.isNotEmpty() && hargaProduk.isNotEmpty() && satuan.isNotEmpty()) {
                     productViewModel.editProduct(
                         selectedProduct.id_product,
                         kategori,
                         namaProduk,
-                        jenisService,
                         durasi,
                         hargaProduk,
                         satuan
@@ -202,6 +212,75 @@ class ProductActivity : AppCompatActivity() {
         }
 
         editProductDialog.show()
+    }
+
+    private fun getCategoryPosition(idKategori: String, spinner: Spinner): Int {
+        val adapter = spinner.adapter
+        if (adapter != null) {
+            val count = adapter.count
+            for (i in 0 until count) {
+                val category = adapter.getItem(i) as GetCategoryResponse.DataCategory
+                if (category.id_kategori == idKategori) {
+                    return i
+                }
+            }
+        }
+        return 0 // Mengembalikan nilai default jika adapter null atau kategori tidak ditemukan
+    }
+
+    private fun showCategorySpinner(spinner: Spinner){
+        val retroInstance = ApiConfig.getApiService()
+        val call = retroInstance.getCategory()
+        call.enqueue(object : Callback<GetCategoryResponse>{
+            override fun onResponse(
+                call: Call<GetCategoryResponse>,
+                response: Response<GetCategoryResponse>
+            ) {
+                if(response.isSuccessful){
+                    val categoryResponse = response.body()
+                    val category = categoryResponse?.data ?: emptyList()
+
+                    val adapter = CategorySpinnerAdapter(this@ProductActivity, category)
+                    categorySpinner.adapter = adapter
+
+                    categorySpinner.onItemSelectedListener =
+                        object : AdapterView.OnItemSelectedListener{
+                            override fun onItemSelected(
+                                parent: AdapterView<*>?,
+                                view: View?,
+                                position: Int,
+                                id: Long
+                            ) {
+                                category[position]
+                            }
+
+                            override fun onNothingSelected(parent: AdapterView<*>?) {
+                                Toast.makeText(
+                                    this@ProductActivity,
+                                    "Kamu tidak memilih kategori apapun",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+
+                        }
+                } else {
+                    Toast.makeText(
+                        this@ProductActivity,
+                        "Gagal mendapatkan data produk",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+            override fun onFailure(call: Call<GetCategoryResponse>, t: Throwable) {
+                Toast.makeText(
+                    this@ProductActivity,
+                    "Periksa Koneksi Internet Anda",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+        })
     }
 
     private fun showLoading(loading: Boolean) {

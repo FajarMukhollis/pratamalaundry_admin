@@ -52,4 +52,6 @@
     <string name="description_rules">Pada Pratama Laudry, kami memiliki beberapa aturan yang harus dipatuhi oleh pelanggan. Aturan tersebut adalah sebagai berikut :</string>
     <string name="rules_asosiasi">Aturan Asosiasi Laundry Indonesia</string>
     <string name="rules_komplain">Aturan Layanan Komplain</string>
+
+    <string name="product_category">Kategori Produk</string>
 </resources>

@@ -27,9 +27,10 @@ class ProductAdapter(
     override fun onBindViewHolder(holder: ViewHolderProduct, position: Int) {
         val result = results[position]
         holder.apply {
-            result.kategori
+            result.id_kategori
+            kategori.text = result.jenis_kategori
             nama_produk.text = result.nama_produk
-            jenis_service.text = result.jenis_service
+            durasi.text = result.durasi
             harga_produk.text = result.harga_produk
             satuan.text = result.satuan
 
@@ -46,12 +47,13 @@ class ProductAdapter(
     }
 
     inner class ViewHolderProduct(view: View) : RecyclerView.ViewHolder(view) {
-        val nama_produk = view.findViewById<TextView>(R.id.name_product)
-        val jenis_service = view.findViewById<TextView>(R.id.service)
-        val harga_produk = view.findViewById<TextView>(R.id.harga)
-        val satuan = view.findViewById<TextView>(R.id.satuan)
-        val btn_delete = view.findViewById<ImageView>(R.id.btn_delete)
-        val btn_edit = view.findViewById<ImageView>(R.id.btn_edit)
+        val kategori: TextView = view.findViewById(R.id.tv_category)
+        val nama_produk: TextView = view.findViewById(R.id.tv_produk)
+        val durasi: TextView = view.findViewById(R.id.tv_durasi)
+        val harga_produk: TextView = view.findViewById(R.id.tv_harga)
+        val satuan: TextView = view.findViewById(R.id.tv_satuan)
+        val btn_delete: ImageView = view.findViewById(R.id.btn_delete)
+        val btn_edit: ImageView = view.findViewById(R.id.btn_edit)
     }
 
     fun setData(data: List<ProductResponse.Product>) {

@@ -10,6 +10,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import com.fajar.pratamalaundry_admin.databinding.ActivityMainBinding
+import com.fajar.pratamalaundry_admin.presentation.product.CategoryActivity
 import com.fajar.pratamalaundry_admin.presentation.product.ProductActivity
 import com.fajar.pratamalaundry_admin.presentation.profile.ProfileActivity
 import com.fajar.pratamalaundry_admin.presentation.recap.RecapActivity
@@ -51,6 +52,10 @@ class MainActivity : AppCompatActivity() {
             toRules()
         }
 
+        _binding.conCategory.setOnClickListener {
+            toCategory()
+        }
+
     }
 
     private fun toService() {
@@ -90,5 +95,10 @@ class MainActivity : AppCompatActivity() {
     private fun toRules(){
         val moveToRules = Intent(this, RulesActivity::class.java)
         startActivity(moveToRules)
+    }
+
+    private fun toCategory(){
+        val moveToCategory = Intent(this, CategoryActivity::class.java)
+        startActivity(moveToCategory)
     }
 }
