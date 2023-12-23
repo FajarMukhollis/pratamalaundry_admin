@@ -37,6 +37,18 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/tv_no_pesanan"
+                style="@style/textNormal"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:textColor="@color/black"
+                android:layout_marginTop="10dp"
+                android:text="Nomor Pesanan"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_date_order" />
+
+
+            <TextView
                 android:id="@+id/tv_name_customer"
                 style="@style/textNormal"
                 android:layout_width="0dp"
@@ -45,7 +57,7 @@
                 android:layout_marginTop="10dp"
                 android:text="nama pelanggan"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_date_order" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_no_pesanan" />
 
             <TextView
                 android:id="@+id/tv_rp"

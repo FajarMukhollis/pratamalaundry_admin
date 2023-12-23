@@ -23,8 +23,14 @@ data class DetailTransaksiResponse(
         @SerializedName("id_petugas")
         val idPetugas: String,
 
+        @SerializedName("id_kategori")
+        val idKategori: String,
+
         @SerializedName("id_produk")
         val idProduk: String,
+
+        @SerializedName("no_pesanan")
+        val no_pesanan: String,
 
         @SerializedName("service")
         val service: String,
@@ -64,6 +70,9 @@ data class DetailTransaksiResponse(
 
         @SerializedName("nama_produk")
         val namaProduk: String,
+
+        @SerializedName("jenis_kategori")
+        val jenisKategori: String
 
         )
 }

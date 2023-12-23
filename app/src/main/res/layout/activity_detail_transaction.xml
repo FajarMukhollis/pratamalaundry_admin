@@ -12,13 +12,44 @@
         android:padding="12dp">
 
         <TextView
+            android:id="@+id/no_pesanan"
+            style="@style/textNormal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="No. Pesanan :"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_no_pesanan"
+            style="@style/textNormal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Nomor Pesanan"
+            android:gravity="right"
+            android:layout_marginStart="89dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/no_pesanan" />
+
+        <View
+            android:id="@+id/view14"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/underline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_no_pesanan" />
+
+        <TextView
             android:id="@+id/name_customer"
             style="@style/textNormal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:text="Nama :"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/view14" />
 
         <TextView
             android:id="@+id/tv_name_customer"
@@ -108,6 +139,38 @@
 
 
         <TextView
+            android:id="@+id/kategori"
+            style="@style/textNormal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Kategori :"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view3" />
+
+        <TextView
+            android:id="@+id/tv_name_category"
+            style="@style/textNormal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:text="Jenis Kategori"
+            android:gravity="right"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/kategori" />
+
+        <View
+            android:id="@+id/view13"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/underline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_name_category" />
+
+
+        <TextView
             android:id="@+id/name_product"
             style="@style/textNormal"
             android:layout_width="0dp"
@@ -115,7 +178,7 @@
             android:layout_marginTop="10dp"
             android:text="Produk :"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view3" />
+            app:layout_constraintTop_toBottomOf="@+id/view13" />
 
         <TextView
             android:id="@+id/tv_name_product"

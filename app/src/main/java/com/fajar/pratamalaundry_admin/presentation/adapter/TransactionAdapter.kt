@@ -18,6 +18,7 @@ class TransactionAdapter(private val results: ArrayList<TransactionResponse.Data
     private lateinit var onItemClickListener: OnItemClickListener
 
     inner class ViewHolderTransaction(view: View) : RecyclerView.ViewHolder(view) {
+        val tv_no_pesanan = view.findViewById<TextView>(R.id.tv_no_pesanan)
         val tv_date_order = view.findViewById<TextView>(R.id.tv_date_order)
         val name_customer = view.findViewById<TextView>(R.id.tv_name_customer)
         val tv_total_price = view.findViewById<TextView>(R.id.tv_total_price)
@@ -53,6 +54,7 @@ class TransactionAdapter(private val results: ArrayList<TransactionResponse.Data
     override fun onBindViewHolder(holder: ViewHolderTransaction, position: Int) {
         val result = results[position]
         holder.apply {
+            tv_no_pesanan.text = result.no_pesanan
             tv_date_order.text = result.tgl_order
             name_customer.text = result.nama_pelanggan
             tv_total_price.text = result.total_harga
