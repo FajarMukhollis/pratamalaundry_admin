@@ -1,51 +1,31 @@
 package com.fajar.pratamalaundry_admin.presentation.transaction
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.app.PendingIntent.FLAG_UPDATE_CURRENT
-import android.content.Context
+import android.app.DatePickerDialog
 import android.content.Intent
-import android.os.Build
-import androidx.core.app.NotificationCompat
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fajar.pratamalaundry_admin.R
 import com.fajar.pratamalaundry_admin.databinding.ActivityTransactionBinding
-import com.fajar.pratamalaundry_admin.model.remote.ApiConfig
-import com.fajar.pratamalaundry_admin.model.request.DeleteHistoryRequest
-import com.fajar.pratamalaundry_admin.model.request.EditHistoryRequest
-import com.fajar.pratamalaundry_admin.model.response.DeleteHistoryResponse
-import com.fajar.pratamalaundry_admin.model.response.EditHistoryResponse
-import com.fajar.pratamalaundry_admin.model.response.ProductResponse
-import com.fajar.pratamalaundry_admin.model.response.TransactionResponse
-import com.fajar.pratamalaundry_admin.presentation.adapter.ProductAdapter
 import com.fajar.pratamalaundry_admin.presentation.adapter.TransactionAdapter
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import java.util.Calendar
 
 class TransactionActivity : AppCompatActivity() {
 
     private lateinit var _binding: ActivityTransactionBinding
     private lateinit var transactionAdapter: TransactionAdapter
     private lateinit var transactionViewModel: TransactionViewModel
-    private val CHANNEL_ID = "Pratama Laundry"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,12 +39,15 @@ class TransactionActivity : AppCompatActivity() {
         })
         observeTransactionData()
         initRecyclerView()
-        showTransaction()
+        transactionViewModel.getTransaction()
         setActionBar()
 
         val swipeRefresh = _binding.swipeRefreshLayout
         swipeRefresh.setOnRefreshListener {
-            showTransaction()
+            transactionViewModel.getTransaction()
+            transactionViewModel.transaction.observe(this) { transaction ->
+                transactionAdapter.setData(transaction)
+            }
             swipeRefresh.isRefreshing = false
         }
     }
@@ -87,6 +70,7 @@ class TransactionActivity : AppCompatActivity() {
                 onBackPressed()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -125,13 +109,31 @@ class TransactionActivity : AppCompatActivity() {
         }
     }
 
-
-
     private fun showLoading(loading: Boolean) {
         when (loading) {
             true -> _binding.progressBar.visibility = View.VISIBLE
             false -> _binding.progressBar.visibility = View.GONE
         }
+    }
+
+    private fun showDatePicker(etTanggal: EditText, endDate: String) {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val datePickerDialog = DatePickerDialog(
+            this,
+            { _: DatePicker, year: Int, monthOfYear: Int, dayOfMonth: Int ->
+                val selectedDate = "$year-${monthOfYear + 1}-$dayOfMonth"
+                etTanggal.setText(selectedDate)
+            },
+            year,
+            month,
+            day
+        )
+
+        datePickerDialog.show()
     }
 
     private fun showDeleteConfirmationDialog(position: Int) {
@@ -151,6 +153,7 @@ class TransactionActivity : AppCompatActivity() {
 
     private fun showEditProductForm(position: Int) {
         val history = transactionAdapter.getItem(position)
+        val orderDate = history.tgl_order
         val editHistoryDialog = AlertDialog.Builder(this)
             .setTitle("Edit Riwayat")
             .setView(R.layout.dialog_edit_history)
@@ -175,7 +178,6 @@ class TransactionActivity : AppCompatActivity() {
                 )
                 spStatusBayar.adapter = statusBayarAdapter
 
-                // Set selected item if needed
                 val initialStatusBayar = history.status_bayar
                 val initialStatusBayarPosition = statusBayar.indexOf(initialStatusBayar)
                 if (initialStatusBayarPosition >= 0) {
@@ -191,7 +193,6 @@ class TransactionActivity : AppCompatActivity() {
                 )
                 spStatusBarang.adapter = statusBarangAdapter
 
-                // Set selected item if needed
                 val initialStatusBarang = history.status_barang
                 val initialStatusBarangPosition = statusBarang.indexOf(initialStatusBarang)
                 if (initialStatusBarangPosition >= 0) {
@@ -199,18 +200,32 @@ class TransactionActivity : AppCompatActivity() {
                 }
             }
 
+            etTanggal?.setOnClickListener {
+                showDatePicker(etTanggal, orderDate)
+                saveButton.isEnabled = true
+            }
+
             saveButton.setOnClickListener {
                 val selectedStatusBayar = spStatusBayar?.selectedItem.toString()
                 val selectedStatusBarang = spStatusBarang?.selectedItem.toString()
                 val selectedTanggal = etTanggal?.text.toString()
 
-                transactionViewModel.putHistory(
-                    history.id_transaksi,
-                    selectedStatusBayar,
-                    selectedStatusBarang,
-                    selectedTanggal
-                )
-                editHistoryDialog.dismiss()
+                if (selectedTanggal >= orderDate) {
+                    transactionViewModel.putHistory(
+                        history.id_transaksi,
+                        selectedStatusBayar,
+                        selectedStatusBarang,
+                        selectedTanggal
+                    )
+                    editHistoryDialog.dismiss()
+                } else {
+                    saveButton.isEnabled = false
+                    Toast.makeText(
+                        this,
+                        "Tanggal yang anda masukan lebih kecil dari tanggal order",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
         editHistoryDialog.show()
@@ -219,45 +234,6 @@ class TransactionActivity : AppCompatActivity() {
     private fun observeTransactionData() {
         transactionViewModel.transaction.observe(this) { transaction ->
             transactionAdapter.setData(transaction)
-        }
-    }
-
-    private fun checkAndNotifyNewTransactions(transactions: List<TransactionResponse.Data>) {
-        // Hitung jumlah transaksi sebelum dan sesudah pembaruan
-        val oldCount = transactionAdapter.itemCount
-        val newCount = transactions.size
-
-        // Jika ada transaksi baru, tampilkan notifikasi
-        if (newCount > oldCount) {
-            showNotification("Transaksi Baru", "Anda memiliki pesanan baru.")
-        }
-    }
-
-    private fun showNotification(title: String, message: String){
-        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_notifications)
-            .setContentTitle(title)
-            .setContentText(message)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-
-        with(NotificationManagerCompat.from(this)){
-            notify(1, builder.build())
-        }
-    }
-
-    private fun createNotificationChannel(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            val name = "Pratama Laundry"
-            val descriptionText = "Ada Pesanan Baru"
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
-                description = descriptionText
-            }
-
-            val notificationManager: NotificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-            notificationManager.createNotificationChannel(channel)
         }
     }
 

@@ -78,7 +78,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:hint="Harga"
-        android:inputType="text"
         android:padding="10dp"
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
@@ -88,6 +87,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_edit_harga"
+            android:inputType="number"
             style="@style/InputTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -98,7 +98,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:hint="Satuan"
+        android:hint="Kg / Pcs"
         android:inputType="text"
         android:padding="10dp"
         android:selectAllOnFocus="true"

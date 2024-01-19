@@ -240,8 +240,8 @@ class CategoryActivity : AppCompatActivity() {
     private fun showDeleteCategoryForm(position: Int) {
         val rules = adapterCategory.getItem(position)
         AlertDialog.Builder(this)
-            .setTitle("Hapus Aturan Asosiasi")
-            .setMessage("Apakah Anda Yakin Ingin Menghapus Aturan Komplain No. ${rules.id_kategori}?")
+            .setTitle("Hapus Kategori")
+            .setMessage("Apakah Anda Yakin Ingin Menghapus Jenis Kategori No. ${rules.id_kategori}?")
             .setPositiveButton("Hapus") { dialog, _ ->
                 deleteCategory(rules.id_kategori)
                 dialog.dismiss()
@@ -298,7 +298,7 @@ class CategoryActivity : AppCompatActivity() {
         val fabAdd = _binding.fabAdd
         fabAdd.setOnClickListener {
             val addCategoryDialog = AlertDialog.Builder(this)
-                .setTitle("Tambah Aturan Asosiasi")
+                .setTitle("Tambah Kategori")
                 .setView(R.layout.dialog_add_category)
                 .setPositiveButton("Tambahkan", null)
                 .setNegativeButton("Batal", null)

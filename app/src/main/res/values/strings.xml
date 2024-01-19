@@ -54,4 +54,5 @@
     <string name="rules_komplain">Aturan Layanan Komplain</string>
 
     <string name="product_category">Kategori Produk</string>
+    <string name="default_notification_channel_description">Ada pesanan baru yang harus anda konfirmasi.</string>
 </resources>
