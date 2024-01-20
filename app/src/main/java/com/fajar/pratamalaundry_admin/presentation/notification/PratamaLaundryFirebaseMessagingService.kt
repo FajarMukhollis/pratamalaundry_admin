@@ -8,9 +8,11 @@ import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
+import android.os.Bundle
 import androidx.core.app.NotificationCompat
 import com.fajar.pratamalaundry_admin.R
 import com.fajar.pratamalaundry_admin.presentation.main.MainActivity
+import com.fajar.pratamalaundry_admin.presentation.transaction.TransactionActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
@@ -19,31 +21,26 @@ import com.google.firebase.messaging.RemoteMessage
 class PratamaLaundryFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        // Handle data payload
         remoteMessage.data.isNotEmpty().let {
             if (it) {
-                val title = remoteMessage.data["title"]
-                val body = remoteMessage.data["body"]
-
-                sendNotification(title, body)
+                sendNotification(
+                    remoteMessage.data["Pesanan Baru"],
+                    remoteMessage.data["Ada pesanan baru yang harus anda konfirmasi."]
+                )
             }
         }
 
-        // Handle notification payload
         remoteMessage.notification?.let {
-            val title = it.title
-            val body = it.body
-
-            sendNotification(title, body)
+            sendNotification(it.title ?: "", it.body ?: "")
         }
     }
 
     private fun sendNotification(title: String?, body: String?) {
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, TransactionActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
         val pendingIntent = PendingIntent.getActivity(
-            this, 0 /* Request code */, intent,
+            this, 0, intent,
             PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
         )
 
@@ -60,7 +57,6 @@ class PratamaLaundryFirebaseMessagingService : FirebaseMessagingService() {
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        // Since android Oreo (API 26) notification channel is needed.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 channelId,
@@ -70,6 +66,7 @@ class PratamaLaundryFirebaseMessagingService : FirebaseMessagingService() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build())
+        notificationManager.notify(0, notificationBuilder.build())
     }
+
 }

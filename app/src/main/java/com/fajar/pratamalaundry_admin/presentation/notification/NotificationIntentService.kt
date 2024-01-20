@@ -8,9 +8,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.JobIntentService
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import com.fajar.pratamalaundry_admin.R
-import com.fajar.pratamalaundry_admin.model.response.TransactionResponse
 import com.fajar.pratamalaundry_admin.presentation.transaction.TransactionActivity
 
 private const val CHANNEL_ID = "Pratama_Laundry_Channel"

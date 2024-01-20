@@ -49,7 +49,7 @@ class TransactionViewModel : ViewModel() {
 
             override fun onFailure(call: Call<TransactionResponse>, t: Throwable) {
                 showLoading(false)
-                _errorMessage.value = "Gagal memuat data: ${t.message}"
+                _errorMessage.value = "Periksa koneksi internet anda"
             }
         })
     }
@@ -77,7 +77,7 @@ class TransactionViewModel : ViewModel() {
 
             override fun onFailure(call: Call<DeleteHistoryResponse>, t: Throwable) {
                 showLoading(false)
-                _errorMessage.value = "Gagal menghapus data: ${t.message}"
+                _errorMessage.value = "Periksa koneksi internet anda"
             }
         })
     }
@@ -113,7 +113,7 @@ class TransactionViewModel : ViewModel() {
 
             override fun onFailure(call: Call<EditHistoryResponse>, t: Throwable) {
                 showLoading(false)
-                _errorMessage.value = "Gagal mengubah data: ${t.message}"
+                _errorMessage.value = "Periksa koneksi internet anda"
             }
         })
     }

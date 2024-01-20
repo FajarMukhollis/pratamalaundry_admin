@@ -3,8 +3,14 @@ package com.fajar.pratamalaundry_admin.model.response
 import com.google.gson.annotations.SerializedName
 
 data class TransactionResponse(
+
+    @SerializedName("data")
     val `data`: ArrayList<Data>,
+
+    @SerializedName("message")
     val message: String,
+
+    @SerializedName("status")
     val status: Boolean
 ) {
     data class Data(
