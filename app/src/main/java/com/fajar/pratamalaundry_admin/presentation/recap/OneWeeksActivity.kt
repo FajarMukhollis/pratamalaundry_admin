@@ -7,14 +7,9 @@ import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.fajar.pratamalaundry_admin.R
 import com.fajar.pratamalaundry_admin.databinding.ActivityOneWeeksBinding
-import com.fajar.pratamalaundry_admin.model.remote.ApiConfig
-import com.fajar.pratamalaundry_admin.model.response.OneMonthResponse
 import com.fajar.pratamalaundry_admin.model.response.OneWeeksResponse
-import com.fajar.pratamalaundry_admin.presentation.adapter.OneMonthAdapter
 import com.fajar.pratamalaundry_admin.presentation.adapter.OneWeekAdapter
-import retrofit2.*
 
 class OneWeeksActivity : AppCompatActivity() {
 

@@ -8,8 +8,6 @@ import android.view.View
 import android.widget.RadioButton
 import com.fajar.pratamalaundry_admin.R
 import com.fajar.pratamalaundry_admin.databinding.ActivityRulesBinding
-import com.fajar.pratamalaundry_admin.presentation.recap.OneMonthActivity
-import com.fajar.pratamalaundry_admin.presentation.recap.OneWeeksActivity
 
 class RulesActivity : AppCompatActivity() {
 

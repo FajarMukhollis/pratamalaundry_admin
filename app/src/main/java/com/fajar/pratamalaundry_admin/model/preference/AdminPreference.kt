@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import androidx.datastore.preferences.core.*
 import com.fajar.pratamalaundry_admin.model.admin.AdminModel
+import kotlinx.coroutines.flow.first
 
 class AdminPreference private constructor(private val dataStore: DataStore<Preferences>) {
 
@@ -50,6 +51,17 @@ class AdminPreference private constructor(private val dataStore: DataStore<Prefe
         }
     }
 
+    suspend fun getTokenFcm(): String {
+        val preferences = dataStore.data.first()
+        return preferences[TOKEN_FCM] ?: ""
+    }
+
+    suspend fun saveTokenFcm(token: String) {
+        dataStore.edit { preferences ->
+            preferences[TOKEN_FCM] = token
+        }
+    }
+
     companion object{
         @Volatile
         private var INSTANCE: AdminPreference? = null
@@ -59,6 +71,7 @@ class AdminPreference private constructor(private val dataStore: DataStore<Prefe
         private val NAME_KEY = stringPreferencesKey("nama")
         private val STATE_TOKEN = stringPreferencesKey("token")
         private val STATE_KEY = booleanPreferencesKey("state")
+        private val TOKEN_FCM = stringPreferencesKey("token_fcm")
 
         fun getInstance(dataStore: DataStore<Preferences>): AdminPreference{
             return INSTANCE ?: synchronized(this) {

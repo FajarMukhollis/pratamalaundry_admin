@@ -7,7 +7,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.fajar.pratamalaundry_admin.R
-import com.fajar.pratamalaundry_admin.model.response.ProductResponse
 import com.fajar.pratamalaundry_admin.model.response.TransactionResponse
 
 class TransactionAdapter(private val results: ArrayList<TransactionResponse.Data>) :

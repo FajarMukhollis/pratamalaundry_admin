@@ -8,12 +8,6 @@ import android.view.View
 import android.widget.RadioButton
 import com.fajar.pratamalaundry_admin.R
 import com.fajar.pratamalaundry_admin.databinding.ActivityRecapBinding
-import com.fajar.pratamalaundry_admin.model.remote.ApiConfig
-import com.fajar.pratamalaundry_admin.model.response.OneWeeksResponse
-import com.fajar.pratamalaundry_admin.presentation.adapter.OneWeekAdapter
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class RecapActivity : AppCompatActivity() {
 

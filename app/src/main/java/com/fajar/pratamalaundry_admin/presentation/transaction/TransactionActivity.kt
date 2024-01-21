@@ -18,14 +18,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fajar.pratamalaundry_admin.R
 import com.fajar.pratamalaundry_admin.databinding.ActivityTransactionBinding
-import com.fajar.pratamalaundry_admin.model.remote.ApiConfig
-import com.fajar.pratamalaundry_admin.model.request.DeleteHistoryRequest
-import com.fajar.pratamalaundry_admin.model.response.DeleteHistoryResponse
-import com.fajar.pratamalaundry_admin.model.response.TransactionResponse
 import com.fajar.pratamalaundry_admin.presentation.adapter.TransactionAdapter
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.util.Calendar
 
 class TransactionActivity : AppCompatActivity() {

@@ -32,7 +32,7 @@ class RecapViewModel : ViewModel() {
                 if (response.isSuccessful) {
                     val data = response.body()?.data
                     if (!data.isNullOrEmpty()) {
-                        _recapOneMonth.value = data!!
+                        _recapOneMonth.value = data
                     }
                 }
             }

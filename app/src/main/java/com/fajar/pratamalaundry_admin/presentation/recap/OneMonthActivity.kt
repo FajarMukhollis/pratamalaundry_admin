@@ -4,15 +4,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fajar.pratamalaundry_admin.databinding.ActivityOneMonthBinding
-import com.fajar.pratamalaundry_admin.model.remote.ApiConfig
 import com.fajar.pratamalaundry_admin.model.response.OneMonthResponse
 import com.fajar.pratamalaundry_admin.presentation.adapter.OneMonthAdapter
-import retrofit2.*
 
 class OneMonthActivity : AppCompatActivity() {
 

@@ -8,10 +8,8 @@ import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
-import android.os.Bundle
 import androidx.core.app.NotificationCompat
 import com.fajar.pratamalaundry_admin.R
-import com.fajar.pratamalaundry_admin.presentation.main.MainActivity
 import com.fajar.pratamalaundry_admin.presentation.transaction.TransactionActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -24,8 +22,8 @@ class PratamaLaundryFirebaseMessagingService : FirebaseMessagingService() {
         remoteMessage.data.isNotEmpty().let {
             if (it) {
                 sendNotification(
-                    remoteMessage.data["Pesanan Baru"],
-                    remoteMessage.data["Ada pesanan baru yang harus anda konfirmasi."]
+                    remoteMessage.data["title"],
+                    remoteMessage.data["body"]
                 )
             }
         }

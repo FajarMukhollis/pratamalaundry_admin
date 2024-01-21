@@ -1,18 +1,14 @@
 package com.fajar.pratamalaundry_admin.presentation.product
 
-import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.fajar.pratamalaundry_admin.R
-import com.fajar.pratamalaundry_admin.databinding.DialogLoadingBinding
 import com.fajar.pratamalaundry_admin.model.remote.ApiConfig
 import com.fajar.pratamalaundry_admin.model.request.DeleteProductRequest
 import com.fajar.pratamalaundry_admin.model.request.EditProductRequest
 import com.fajar.pratamalaundry_admin.model.response.DeleteProductResponse
 import com.fajar.pratamalaundry_admin.model.response.EditProductResponse
 import com.fajar.pratamalaundry_admin.model.response.ProductResponse
-import com.fajar.pratamalaundry_admin.presentation.adapter.ProductAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

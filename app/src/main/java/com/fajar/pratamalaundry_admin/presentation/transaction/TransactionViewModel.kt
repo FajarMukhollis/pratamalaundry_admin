@@ -10,7 +10,6 @@ import com.fajar.pratamalaundry_admin.model.response.DeleteHistoryResponse
 import com.fajar.pratamalaundry_admin.model.response.DetailTransaksiResponse
 import com.fajar.pratamalaundry_admin.model.response.EditHistoryResponse
 import com.fajar.pratamalaundry_admin.model.response.TransactionResponse
-import com.fajar.pratamalaundry_admin.presentation.adapter.TransactionAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

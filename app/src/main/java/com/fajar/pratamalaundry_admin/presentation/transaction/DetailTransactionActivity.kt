@@ -4,14 +4,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import com.fajar.pratamalaundry_admin.R
 import com.fajar.pratamalaundry_admin.databinding.ActivityDetailTransactionBinding
 import com.fajar.pratamalaundry_admin.model.remote.ApiConfig
-import com.fajar.pratamalaundry_admin.model.request.DeleteHistoryRequest
 import com.fajar.pratamalaundry_admin.model.response.DetailTransaksiResponse
-import com.fajar.pratamalaundry_admin.model.response.TransactionResponse
 import retrofit2.*
 
 class DetailTransactionActivity : AppCompatActivity() {

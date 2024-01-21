@@ -10,4 +10,11 @@ class MainViewModel(
 
     fun getNama() = adminPreference.getAdmin().asLiveData()
 
+    suspend fun saveTokenFcm(token: String) {
+        adminPreference.saveTokenFcm(token)
+    }
+    suspend fun getTokenFcm() : String {
+        return adminPreference.getTokenFcm()
+    }
+
 }

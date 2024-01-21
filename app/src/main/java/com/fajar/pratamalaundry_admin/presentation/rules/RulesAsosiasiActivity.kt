@@ -15,21 +15,13 @@ import com.fajar.pratamalaundry_admin.R
 import com.fajar.pratamalaundry_admin.databinding.ActivityRulesAsosiasiBinding
 import com.fajar.pratamalaundry_admin.model.remote.ApiConfig
 import com.fajar.pratamalaundry_admin.model.request.AddRulesAsosiasiRequest
-import com.fajar.pratamalaundry_admin.model.request.AddRulesKomplainRequest
 import com.fajar.pratamalaundry_admin.model.request.DeleteRulesAsosiasiRequest
-import com.fajar.pratamalaundry_admin.model.request.DeleteRulesKomplainRequest
 import com.fajar.pratamalaundry_admin.model.request.EditRulesAsosiasiRequest
-import com.fajar.pratamalaundry_admin.model.request.EditRulesKomplainRequest
 import com.fajar.pratamalaundry_admin.model.response.AddRulesAsosiasiResponse
-import com.fajar.pratamalaundry_admin.model.response.AddRulesKomplainResponse
 import com.fajar.pratamalaundry_admin.model.response.DeleteRulesAsosiasiResponse
-import com.fajar.pratamalaundry_admin.model.response.DeleteRulesKomplainResponse
 import com.fajar.pratamalaundry_admin.model.response.EditRulesAsosiasiResponse
-import com.fajar.pratamalaundry_admin.model.response.EditRulesKomplainResponse
 import com.fajar.pratamalaundry_admin.model.response.RulesAsosiasiResponse
-import com.fajar.pratamalaundry_admin.model.response.RulesKomplainResponse
 import com.fajar.pratamalaundry_admin.presentation.adapter.RulesAsosiasiAdapter
-import com.fajar.pratamalaundry_admin.presentation.adapter.RulesKomplainAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -80,9 +72,6 @@ class RulesAsosiasiActivity : AppCompatActivity() {
         val rv = _binding.recyclerRules
 
         rv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(rv: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(rv, newState)
-            }
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)

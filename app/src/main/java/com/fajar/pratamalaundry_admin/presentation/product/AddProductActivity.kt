@@ -9,15 +9,12 @@ import android.widget.AdapterView
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import com.fajar.pratamalaundry_admin.R
 import com.fajar.pratamalaundry_admin.databinding.ActivityAddProductBinding
 import com.fajar.pratamalaundry_admin.model.remote.ApiConfig
 import com.fajar.pratamalaundry_admin.model.request.AddProductRequest
 import com.fajar.pratamalaundry_admin.model.response.AddProductResponse
 import com.fajar.pratamalaundry_admin.model.response.GetCategoryResponse
-import com.fajar.pratamalaundry_admin.model.response.ProductResponse
 import com.fajar.pratamalaundry_admin.presentation.adapter.CategorySpinnerAdapter
-import com.fajar.pratamalaundry_admin.presentation.adapter.ProductAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

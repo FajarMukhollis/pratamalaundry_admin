@@ -102,11 +102,6 @@
         </activity>
 
         <service
-            android:name=".presentation.notification.NotificationIntentService"
-            android:exported="false"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
-
-        <service
             android:name=".presentation.notification.PratamaLaundryFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
@@ -114,10 +109,6 @@
             </intent-filter>
         </service>
 
-        <service
-            android:name=".presentation.notification.NotificationWorker"
-            android:exported="false"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
 
 </manifest>

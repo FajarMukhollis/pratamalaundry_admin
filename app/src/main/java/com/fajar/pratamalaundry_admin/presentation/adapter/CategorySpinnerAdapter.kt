@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.fajar.pratamalaundry_admin.model.response.GetCategoryResponse
-import com.fajar.pratamalaundry_admin.model.response.ProductResponse
 
 class CategorySpinnerAdapter(
     context: Context,
