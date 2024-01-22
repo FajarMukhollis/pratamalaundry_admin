@@ -1,5 +1,7 @@
 package com.fajar.pratamalaundry_admin.presentation.transaction
 
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -24,6 +26,52 @@ class DetailTransactionActivity : AppCompatActivity() {
         val idTransaksi = intent.getStringExtra("id_transaksi").toString()
 
         showDataDetail(idTransaksi)
+        _binding.tvNoTelp.setOnClickListener {
+            val phoneNumber = _binding.tvNoTelp.text.toString()
+
+            // Format nomor telepon untuk menghapus karakter selain angka
+            val formattedPhoneNumber = phoneNumber.replace("[^0-9]".toRegex(), "")
+
+            // Periksa apakah nomor dimulai dengan 0
+            if (formattedPhoneNumber.startsWith("0")) {
+                // Hilangkan 0 dan tambahkan kode negara Indonesia (62)
+                val phoneNumberWithoutZero = formattedPhoneNumber.substring(1)
+                val whatsappUrl = "https://wa.me/62$phoneNumberWithoutZero"
+
+                // Buat intent untuk membuka aplikasi WhatsApp
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(whatsappUrl)
+
+                // Periksa apakah aplikasi WhatsApp terinstall
+                if (intent.resolveActivity(packageManager) != null) {
+                    startActivity(intent)
+                } else {
+                    // Handle jika aplikasi WhatsApp tidak terinstall
+                    Toast.makeText(
+                        this@DetailTransactionActivity,
+                        "Aplikasi WhatsApp tidak terinstall.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } else {
+                // Jika nomor tidak dimulai dengan 0, langsung buka WhatsApp
+                val whatsappUrl = "https://wa.me/$formattedPhoneNumber"
+
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(whatsappUrl)
+
+                if (intent.resolveActivity(packageManager) != null) {
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(
+                        this@DetailTransactionActivity,
+                        "Aplikasi WhatsApp tidak terinstall.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+
     }
 
     private fun showDataDetail(id_transaksi: String) {

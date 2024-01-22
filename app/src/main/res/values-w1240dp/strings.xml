@@ -48,5 +48,11 @@
     </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="rules">Aturan</string>
+    <string name="description_rules">Pada Pratama Laudry, kami memiliki beberapa aturan yang harus dipatuhi oleh pelanggan. Aturan tersebut adalah sebagai berikut :</string>
+    <string name="rules_asosiasi">Aturan Asosiasi Laundry Indonesia</string>
+    <string name="rules_komplain">Aturan Layanan Komplain</string>
+
+    <string name="product_category">Kategori Produk</string>
     <string name="default_notification_channel_description">Ada pesanan baru yang harus anda konfirmasi.</string>
 </resources>

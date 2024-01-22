@@ -109,4 +109,9 @@ interface ApiService {
     fun addCategory(
         @Body addCategoryRequest: AddCategoryRequest
     ): Call<CategoryResponse>
+
+    @POST("admin/update_fcm")
+    fun updateFcm(
+        @Body updateFcmRequest: UpdateFcmRequest
+    ): Call<UpdateFcmResponse>
 }

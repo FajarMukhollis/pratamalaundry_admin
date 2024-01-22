@@ -10,12 +10,12 @@ import com.fajar.pratamalaundry_admin.model.result.Result
 class AdminRepository(
     private val apiService: ApiService
 ) : IAdminRepository {
-    override fun loginAdmin(username: String, pass: String): LiveData<Result<LoginResponse>> =
+    override fun loginAdmin(username: String, pass: String, fcm: String): LiveData<Result<LoginResponse>> =
         liveData {
             emit(Result.Loading)
 
             try {
-                val response = apiService.loginAdmin(LoginRequest(username, pass))
+                val response = apiService.loginAdmin(LoginRequest(username, pass, fcm))
 
                 if (response.isSuccessful) {
                     val responseBody = response.body()

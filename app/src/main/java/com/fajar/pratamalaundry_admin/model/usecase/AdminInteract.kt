@@ -7,6 +7,6 @@ import com.fajar.pratamalaundry_admin.model.result.Result
 
 class AdminInteract (private val userRepository: IAdminRepository):
     AdminUseCase {
-    override fun loginAdmin(username: String, pass: String): LiveData<Result<LoginResponse>> =
-        userRepository.loginAdmin(username, pass)
+    override fun loginAdmin(username: String, pass: String, fcm: String): LiveData<Result<LoginResponse>> =
+        userRepository.loginAdmin(username, pass, fcm)
 }

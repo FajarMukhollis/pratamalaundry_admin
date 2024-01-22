@@ -11,16 +11,19 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.fajar.pratamalaundry_admin.R
 import com.fajar.pratamalaundry_admin.databinding.ActivityLoginBinding
 import com.fajar.pratamalaundry_admin.databinding.DialogLoadingBinding
 import com.fajar.pratamalaundry_admin.presentation.main.MainActivity
 import com.fajar.pratamalaundry_admin.viewmodel.ViewModelFactory
 import com.fajar.pratamalaundry_admin.model.result.Result
+import kotlinx.coroutines.launch
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 private const val TAG = "LoginActivity"
+
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var _binding: ActivityLoginBinding
@@ -50,12 +53,15 @@ class LoginActivity : AppCompatActivity() {
         val password = passwordEditText.text.toString()
 
         when {
-            username.isEmpty() -> usernameEditText.error = resources.getString(R.string.empty_username)
+            username.isEmpty() -> usernameEditText.error =
+                resources.getString(R.string.empty_username)
+
             password.isEmpty() -> passwordEditText.error = resources.getString(R.string.empty_pass)
             username.isEmpty() && password.isEmpty() -> {
                 usernameEditText.error = resources.getString(R.string.empty_username)
                 passwordEditText.error = resources.getString(R.string.empty_pass)
             }
+
             else -> {
                 val customBind = DialogLoadingBinding.inflate(layoutInflater)
                 val loadingDialogBuilder = AlertDialog.Builder(this).apply {
@@ -63,25 +69,38 @@ class LoginActivity : AppCompatActivity() {
                     setCancelable(false)
                 }
                 val loadingDialog = loadingDialogBuilder.create()
+                lifecycleScope.launch {
+                    val fcm = loginViewModel.getTokenFcm()
+                    loginViewModel.loginAdmin(username, password, fcm)
+                        .observe(this@LoginActivity) { result ->
+                            when (result) {
+                                is Result.Loading -> loadingDialog.show()
+                                is Result.Success -> {
+                                    Toast.makeText(
+                                        this@LoginActivity,
+                                        "Login Berhasil",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    loadingDialog.dismiss()
+                                    loginViewModel.saveUser(result.data)
+                                    Log.d(TAG, "loginAction: ${result.data}")
+                                    toMain()
+                                }
 
-                loginViewModel.loginAdmin(username, password).observe(this) { result ->
-                    when (result) {
-                        is Result.Loading -> loadingDialog.show()
-                        is Result.Success -> {
-                            Toast.makeText(this, "Login Berhasil", Toast.LENGTH_SHORT).show()
-                            loadingDialog.dismiss()
-                            loginViewModel.saveUser(result.data)
-                            Log.d(TAG, "loginAction: ${result.data}")
-                            toMain()
+                                is Result.Error -> {
+                                    loadingDialog.dismiss()
+                                    Toast.makeText(
+                                        this@LoginActivity,
+                                        "Username dan Password Tidak diketahui",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    Log.d(TAG, "loginAction: ${result.error}")
+                                    errorAlert(result.error)
+                                }
+                            }
                         }
-                        is Result.Error -> {
-                            loadingDialog.dismiss()
-                            Toast.makeText(this, "Username dan Password Tidak diketahui", Toast.LENGTH_SHORT).show()
-                            Log.d(TAG, "loginAction: ${result.error}")
-                            errorAlert(result.error)
-                        }
-                    }
                 }
+
             }
         }
     }

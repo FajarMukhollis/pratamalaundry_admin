@@ -5,5 +5,5 @@ import com.fajar.pratamalaundry_admin.model.response.LoginResponse
 import com.fajar.pratamalaundry_admin.model.result.Result
 
 interface AdminUseCase {
-    fun loginAdmin(username: String, pass: String): LiveData<Result<LoginResponse>>
+    fun loginAdmin(username: String, pass: String, fcm: String): LiveData<Result<LoginResponse>>
 }

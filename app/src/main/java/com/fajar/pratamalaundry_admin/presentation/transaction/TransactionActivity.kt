@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.fajar.pratamalaundry_admin.R
 import com.fajar.pratamalaundry_admin.databinding.ActivityTransactionBinding
 import com.fajar.pratamalaundry_admin.presentation.adapter.TransactionAdapter
+import java.text.SimpleDateFormat
 import java.util.Calendar
 
 class TransactionActivity : AppCompatActivity() {
@@ -116,7 +117,7 @@ class TransactionActivity : AppCompatActivity() {
         }
     }
 
-    private fun showDatePicker(etTanggal: EditText, endDate: String) {
+    private fun showDatePicker(etTanggal: EditText) {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
@@ -153,7 +154,7 @@ class TransactionActivity : AppCompatActivity() {
 
     private fun showEditProductForm(position: Int) {
         val history = transactionAdapter.getItem(position)
-        val orderDate = history.tgl_order
+        val orderDate = SimpleDateFormat("yyy-MM-dd").parse(history.tgl_order)
         val editHistoryDialog = AlertDialog.Builder(this)
             .setTitle("Edit Riwayat")
             .setView(R.layout.dialog_edit_history)
@@ -201,7 +202,7 @@ class TransactionActivity : AppCompatActivity() {
             }
 
             etTanggal?.setOnClickListener {
-                showDatePicker(etTanggal, orderDate)
+                showDatePicker(etTanggal)
                 saveButton.isEnabled = true
             }
 
@@ -210,19 +211,28 @@ class TransactionActivity : AppCompatActivity() {
                 val selectedStatusBarang = spStatusBarang?.selectedItem.toString()
                 val selectedTanggal = etTanggal?.text.toString()
 
-                if (selectedTanggal >= orderDate) {
-                    transactionViewModel.putHistory(
-                        history.id_transaksi,
-                        selectedStatusBayar,
-                        selectedStatusBarang,
-                        selectedTanggal
-                    )
-                    editHistoryDialog.dismiss()
+                if (selectedTanggal.isNotEmpty()) {
+                    val selectedDate = SimpleDateFormat("yyyy-MM-dd").parse(selectedTanggal)
+
+                    if (selectedDate != null && selectedDate >= orderDate) {
+                        transactionViewModel.putHistory(
+                            history.id_transaksi,
+                            selectedStatusBayar,
+                            selectedStatusBarang,
+                            selectedTanggal
+                        )
+                        editHistoryDialog.dismiss()
+                    } else {
+                        Toast.makeText(
+                            this,
+                            "Tanggal selesai lebih kecil dari tanggal order",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 } else {
-                    saveButton.isEnabled = false
                     Toast.makeText(
                         this,
-                        "Tanggal yang anda masukan lebih kecil dari tanggal order",
+                        "Masukkan tanggal selesai terlebih dahulu",
                         Toast.LENGTH_SHORT
                     ).show()
                 }

@@ -6,5 +6,5 @@ import com.fajar.pratamalaundry_admin.model.result.Result
 
 interface IAdminRepository {
 
-    fun loginAdmin(username: String, pass: String): LiveData<Result<LoginResponse>>
+    fun loginAdmin(username: String, pass: String, fcm: String): LiveData<Result<LoginResponse>>
 }

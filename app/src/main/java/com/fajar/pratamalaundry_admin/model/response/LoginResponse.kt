@@ -28,6 +28,9 @@ data class Data(
     val username: String,
 
     @SerializedName("password")
-    val password: String
+    val password: String,
+
+    @SerializedName("fcm_petugas")
+    val fcm_petugas: String
 
 )

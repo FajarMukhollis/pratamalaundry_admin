@@ -6,14 +6,12 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import com.fajar.pratamalaundry_admin.databinding.ActivityMainBinding
 import androidx.appcompat.app.AlertDialog
-import com.fajar.pratamalaundry_admin.model.response.TransactionResponse
 import com.fajar.pratamalaundry_admin.presentation.product.CategoryActivity
 import com.fajar.pratamalaundry_admin.presentation.product.ProductActivity
 import com.fajar.pratamalaundry_admin.presentation.profile.ProfileActivity
@@ -23,41 +21,18 @@ import com.fajar.pratamalaundry_admin.presentation.transaction.TransactionActivi
 import com.fajar.pratamalaundry_admin.viewmodel.ViewModelFactory
 import android.provider.Settings
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.PeriodicWorkRequest
-import androidx.work.WorkManager
-import com.fajar.pratamalaundry_admin.model.remote.ApiConfig
-import com.fajar.pratamalaundry_admin.model.remote.ApiFirebase
-import com.fajar.pratamalaundry_admin.model.request.Notification
-import com.fajar.pratamalaundry_admin.model.request.NotificationRequest
-import com.fajar.pratamalaundry_admin.model.response.NotificationResponse
-import com.fajar.pratamalaundry_admin.presentation.MyWorker
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.util.concurrent.TimeUnit
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class MainActivity : AppCompatActivity() {
-    companion object {
-        private const val TAG = "MainActivity"
-        private const val WORKER_TAG = "MyWorker"
-    }
 
     private lateinit var mainViewModel: MainViewModel
-    private lateinit var newTransactionViewModel: NewTransactionViewModel
     private lateinit var _binding: ActivityMainBinding
-    private var previousTransactions: List<TransactionResponse.Data> = emptyList()
-
-    private val pollingHandler = Handler()
-    private val pollingInterval = 10000 // Interval polling dalam milidetik (contoh: 1 menit)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,24 +53,12 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        val workRequest = PeriodicWorkRequest.Builder(
-            MyWorker::class.java,
-            15, TimeUnit.MINUTES // Atur interval menjadi 3 menit
-        ).addTag(WORKER_TAG).build()
-
-        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-            WORKER_TAG,
-            ExistingPeriodicWorkPolicy.UPDATE,
-            workRequest
-        )
-
         requestNotificationPermission()
 
         setViewModel()
-        setViewModels()
         getName()
 
-        if (intent.action == "OPEN_TRANSACTION_PAGE") {
+        if (intent.action == "KOTLIN_NOTIFICATION_CLICK" || intent.getBooleanExtra("FROM_NOTIFICATION", false)) {
             toTransaction()
         }
         _binding.profile.setOnClickListener {
@@ -124,134 +87,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-        startPolling()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        stopPolling()
-    }
-
-    private fun startPolling() {
-        pollingHandler.post(object : Runnable {
-            override fun run() {
-                getTransaction()
-                pollingHandler.postDelayed(this, pollingInterval.toLong())
-            }
-        })
-    }
-
-    private fun stopPolling() {
-        pollingHandler.removeCallbacksAndMessages(null)
-    }
-
-    private fun getTransaction() {
-        val retroInstance = ApiConfig.getApiService()
-        val call = retroInstance.getHistory()
-        call.enqueue(object : Callback<TransactionResponse> {
-            override fun onResponse(
-                call: Call<TransactionResponse>,
-                response: Response<TransactionResponse>
-            ) {
-                if (response.isSuccessful) {
-                    response.body()?.let {
-                        val newTransactions = it.data
-                        val addedTransactions =
-                            newTransactions.filter { it !in previousTransactions }
-
-                        val pendingConfirmationTransactions =
-                            addedTransactions.filter { it.status_barang == "Menunggu Konfirmasi" }
-
-                        if (pendingConfirmationTransactions.isNotEmpty()) {
-                            Log.d("NotificationDebug", "Notifikasi akan muncul")
-                            // Memperbarui previousTransactions
-                            previousTransactions = newTransactions.toList()
-
-                            postNotification()
-                        } else {
-                            Log.d("NotificationDebug", "Tidak ada notifikasi yang akan muncul")
-                        }
-                    }
-                } else {
-                    Toast.makeText(
-                        this@MainActivity,
-                        "Tidak ada pesanan baru",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-
-            override fun onFailure(call: Call<TransactionResponse>, t: Throwable) {
-                Toast.makeText(
-                    this@MainActivity,
-                    "${t.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        })
-    }
-
-    private fun postNotification() {
-        val retroInstance = ApiFirebase.getApiFirebase()
-        lifecycleScope.launch {
-            val serverKey =
-                "AAAADRgdVUk:APA91bEWUU-SfVofYgWivzqc_971BtZXAnHEx9_aKPLAzMQiBa0ntRwlISevXQ-gg3vTKQoiIx61q7pDHNeaTPHmlRPvMIUnZJ58wF-v88SL6egdS3Qk9BKq2YWeIXxPJ24pjzruXsBs"
-            val token = mainViewModel.getTokenFcm()
-            val title = "Pesanan Baru"
-            val content = "Ada pesanan baru yang harus anda konfirmasi."
-            val reqNotification = NotificationRequest(
-                to = token,
-                notification = Notification(
-                    title = title,
-                    body = content
-                )
-            )
-            Log.d(TAG, "serverKey: $serverKey")
-            Log.d(TAG, "FCM Token Post (Petugas): $token")
-            val call = retroInstance.sendNotification(
-                "application/json",
-                "key=$serverKey",
-                reqNotification
-            )
-
-            call.enqueue(object : Callback<NotificationResponse> {
-                override fun onResponse(
-                    call: Call<NotificationResponse>,
-                    response: Response<NotificationResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        response.body()
-                        Log.d(TAG, "serverKey: $serverKey")
-                        Log.d(TAG, "FCM Token (Petugas): $token")
-
-                    }
-                }
-
-                override fun onFailure(
-                    call: Call<NotificationResponse>,
-                    t: Throwable
-                ) {
-                    Log.d(TAG, "Fail serverKey: $serverKey")
-                    Log.d(TAG, "Fail FCM Token (Petugas): $token")
-                }
-
-            })
-        }
-    }
-
     private fun setViewModel() {
         val factory = ViewModelFactory.getInstance(this, dataStore)
         mainViewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
     }
-
-    private fun setViewModels() {
-        val factory = ViewModelFactory.getInstance(this, dataStore)
-        newTransactionViewModel =
-            ViewModelProvider(this, factory)[NewTransactionViewModel::class.java]
-    }
-
     private fun requestNotificationPermission() {
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

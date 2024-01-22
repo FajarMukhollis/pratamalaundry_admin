@@ -11,8 +11,6 @@ import com.fajar.pratamalaundry_admin.model.remote.ApiConfig
 import com.fajar.pratamalaundry_admin.model.usecase.AdminUseCase
 import com.fajar.pratamalaundry_admin.presentation.login.LoginViewModel
 import com.fajar.pratamalaundry_admin.presentation.main.MainViewModel
-import com.fajar.pratamalaundry_admin.presentation.main.NewTransaction
-import com.fajar.pratamalaundry_admin.presentation.main.NewTransactionViewModel
 import com.fajar.pratamalaundry_admin.presentation.profile.ProfileViewModel
 import com.fajar.pratamalaundry_admin.presentation.splash.SplashViewModel
 
@@ -33,9 +31,6 @@ class ViewModelFactory(
             ) as T
             modelClass.isAssignableFrom(ProfileViewModel::class.java) -> ProfileViewModel(
                 pref
-            ) as T
-            modelClass.isAssignableFrom(NewTransactionViewModel::class.java) -> NewTransactionViewModel(
-                NewTransaction(ApiConfig.getApiService())
             ) as T
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
