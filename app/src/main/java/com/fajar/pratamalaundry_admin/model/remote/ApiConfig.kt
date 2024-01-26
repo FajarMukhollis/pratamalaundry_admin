@@ -8,7 +8,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiConfig {
         private const val BASE_URL = "http://192.168.1.14/api-laundry/"
+//    private const val BASE_URL = "http://192.168.170.128/api-laundry/" //Hp
 //    private const val BASE_URL = "https://pratamalaundry.my.id/"
+
 
     fun getApiService(): ApiService{
         val loggingInterceptor = if (BuildConfig.DEBUG) {

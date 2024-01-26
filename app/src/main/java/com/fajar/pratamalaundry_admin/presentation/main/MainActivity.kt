@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         setViewModel()
         getName()
 
-        if (intent.action == "KOTLIN_NOTIFICATION_CLICK" || intent.getBooleanExtra("FROM_NOTIFICATION", false)) {
+        if (intent.action == "com.fajar.pratamalaundry_admin.KOTLIN_NOTIFICATION_CLICK" || intent.action == "com.fajar.pratamalaundry_admin.NOTIFICATION_COMPLAINT") {
             toTransaction()
         }
         _binding.profile.setOnClickListener {
@@ -91,6 +91,7 @@ class MainActivity : AppCompatActivity() {
         val factory = ViewModelFactory.getInstance(this, dataStore)
         mainViewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
     }
+
     private fun requestNotificationPermission() {
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

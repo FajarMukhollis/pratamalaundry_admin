@@ -13,6 +13,7 @@ import com.fajar.pratamalaundry_admin.R
 import com.fajar.pratamalaundry_admin.model.remote.ApiConfig
 import com.fajar.pratamalaundry_admin.model.request.UpdateFcmRequest
 import com.fajar.pratamalaundry_admin.model.response.UpdateFcmResponse
+import com.fajar.pratamalaundry_admin.presentation.main.MainActivity
 import com.fajar.pratamalaundry_admin.presentation.main.MainViewModel
 import com.fajar.pratamalaundry_admin.presentation.transaction.TransactionActivity
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -37,20 +38,33 @@ class PratamaLaundryFirebaseMessagingService : FirebaseMessagingService() {
             if (it) {
                 val title = remoteMessage.data["title"]
                 val body = remoteMessage.data["body"]
-                val payloadData = remoteMessage.data
+                val payloadDataStatusBarang = remoteMessage.data
+                val payloadComplaint = remoteMessage.data
 
-                if (payloadData.isNotEmpty()) {
-                    if (payloadData["status_barang"] == "Menunggu Konfirmasi" || payloadData["type"] == "new_order" ){
-                        sendNotification(title, body)
+                if (payloadDataStatusBarang.isNotEmpty()) {
+                    if (payloadDataStatusBarang["status_barang"] == "Menunggu Konfirmasi" || payloadDataStatusBarang["type"] == "new_order" ){
+                        sendNotificationStatusBarang(title, body)
+                    } else {
+                        Log.d(TAG, "Message data payloadDataStatusBarang: ${remoteMessage.data}")
+                    }
+                    Log.d(TAG, "Message data payloadDataStatusBarang: ${remoteMessage.data}")
+                }
+
+                if(payloadComplaint.isNotEmpty()){
+                    if(payloadComplaint["complaint"] == "Komplain Baru" || payloadComplaint["type"] == "new_complaint"){
+                        sendNotificationComplain(title, body)
+                    } else {
+                        Log.d(TAG, "Message data payloadComplaint: ${remoteMessage.data}")
                     }
                 }
 
-
+                Log.d(TAG, "Message data payloadComplaint: ${remoteMessage.data}")
             }
         }
 
         remoteMessage.notification?.let {
-            sendNotification(it.title ?: "", it.body ?: "")
+            sendNotificationStatusBarang(it.title ?: "", it.body ?: "")
+            sendNotificationComplain(it.title ?: "", it.body ?: "")
         }
     }
 
@@ -87,9 +101,43 @@ class PratamaLaundryFirebaseMessagingService : FirebaseMessagingService() {
         }
     }
 
-    private fun sendNotification(title: String?, body: String?) {
-        val intent = Intent(this, TransactionActivity::class.java)
-        intent.putExtra("FROM_NOTIFICATION", true)
+    private fun sendNotificationStatusBarang(title: String?, body: String?) {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.action = "com.fajar.pratamalaundry_admin.NOTIFICATION_CLICK"
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+
+        val pendingIntent = PendingIntent.getActivity(
+            this, 0, intent,
+            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val channelId = "default"
+        val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        val notificationBuilder = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.ic_notifications)
+            .setContentTitle(title)
+            .setContentText(body)
+            .setAutoCancel(true)
+            .setSound(defaultSoundUri)
+            .setContentIntent(pendingIntent)
+
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                channelId,
+                "Pratama Laundry",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        notificationManager.notify(0, notificationBuilder.build())
+    }
+    private fun sendNotificationComplain(title: String?, body: String?) {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.action = "com.fajar.pratamalaundry_admin.NOTIFICATION_COMPLAINT"
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
         val pendingIntent = PendingIntent.getActivity(
