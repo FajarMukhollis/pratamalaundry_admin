@@ -39,26 +39,34 @@ class PratamaLaundryFirebaseMessagingService : FirebaseMessagingService() {
                 val title = remoteMessage.data["title"]
                 val body = remoteMessage.data["body"]
                 val payloadDataStatusBarang = remoteMessage.data
-                val payloadComplaint = remoteMessage.data
 
                 if (payloadDataStatusBarang.isNotEmpty()) {
-                    if (payloadDataStatusBarang["status_barang"] == "Menunggu Konfirmasi" || payloadDataStatusBarang["type"] == "new_order" ){
+                    if (payloadDataStatusBarang["status_barang"] == "Menunggu Konfirmasi" && payloadDataStatusBarang["type"] == "new_order" ){
                         sendNotificationStatusBarang(title, body)
                     } else {
-                        Log.d(TAG, "Message data payloadDataStatusBarang: ${remoteMessage.data}")
+                        Log.d(TAG, "Message data payloadDataStatusBarang: $payloadDataStatusBarang")
                     }
-                    Log.d(TAG, "Message data payloadDataStatusBarang: ${remoteMessage.data}")
+                } else {
+                    Log.d(TAG, "Message data empty payloadDataStatusBarang: $payloadDataStatusBarang")
                 }
+            }
+        }
+
+        remoteMessage.data.isNotEmpty().let {
+            if (it) {
+                val title = remoteMessage.data["title"]
+                val body = remoteMessage.data["body"]
+                val payloadComplaint = remoteMessage.data
 
                 if(payloadComplaint.isNotEmpty()){
-                    if(payloadComplaint["complaint"] == "Komplain Baru" || payloadComplaint["type"] == "new_complaint"){
+                    if(payloadComplaint["complaint"] == "Komplain Baru" && payloadComplaint["type"] == "new_complaint"){
                         sendNotificationComplain(title, body)
                     } else {
-                        Log.d(TAG, "Message data payloadComplaint: ${remoteMessage.data}")
+                        Log.d(TAG, "Message data empty payloadComplaint: $payloadComplaint")
                     }
+                } else {
+                    Log.d(TAG, "Message data empty payloadComplaint: $payloadComplaint")
                 }
-
-                Log.d(TAG, "Message data payloadComplaint: ${remoteMessage.data}")
             }
         }
 
@@ -108,7 +116,7 @@ class PratamaLaundryFirebaseMessagingService : FirebaseMessagingService() {
 
         val pendingIntent = PendingIntent.getActivity(
             this, 0, intent,
-            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_IMMUTABLE,
         )
 
         val channelId = "default"
@@ -135,6 +143,7 @@ class PratamaLaundryFirebaseMessagingService : FirebaseMessagingService() {
 
         notificationManager.notify(0, notificationBuilder.build())
     }
+
     private fun sendNotificationComplain(title: String?, body: String?) {
         val intent = Intent(this, MainActivity::class.java)
         intent.action = "com.fajar.pratamalaundry_admin.NOTIFICATION_COMPLAINT"
@@ -142,10 +151,10 @@ class PratamaLaundryFirebaseMessagingService : FirebaseMessagingService() {
 
         val pendingIntent = PendingIntent.getActivity(
             this, 0, intent,
-            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_IMMUTABLE
         )
 
-        val channelId = "default"
+        val channelId = "complaint"
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_notifications)
@@ -160,8 +169,8 @@ class PratamaLaundryFirebaseMessagingService : FirebaseMessagingService() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
-                channelId,
-                "Pratama Laundry",
+                channelId,  
+                "PratamaLaundry",
                 NotificationManager.IMPORTANCE_DEFAULT
             )
             notificationManager.createNotificationChannel(channel)

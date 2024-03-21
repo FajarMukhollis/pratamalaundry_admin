@@ -15,8 +15,9 @@ import retrofit2.*
 class DetailTransactionActivity : AppCompatActivity() {
 
     private lateinit var _binding: ActivityDetailTransactionBinding
-//        private var baseUrl = "http://192.168.1.14/api-laundry"
-        private var baseUrl = "http://192.168.170.128/api-laundry" //hp
+
+    private var baseUrl = "http://192.168.1.9/api-laundry"
+//    private var baseUrl = "http://192.168.175.128/api-laundry" //hp
 //    private var baseUrl = "https://pratamalaundry.my.id/" //hosting
 
     override fun onCreate(savedInstanceState: Bundle?) {
