@@ -36,5 +36,5 @@ If you have any feedback, please reach out to us at mukhollisfajar@gmail.com
 
 ## Authors
 
-- [@FajarMukhollis](https://github.com/FajarMukhollis)
+[@FajarMukhollis](https://github.com/FajarMukhollis)
 
